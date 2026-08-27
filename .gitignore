@@ -1,0 +1,16 @@
+# Segreti e credenziali: non devono mai entrare nel repository
+.env
+*.key
+*.pem
+credenziali*
+segreti*
+
+# File temporanei del sistema e degli editor
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.tmp
+
+# Esportazioni intermedie e artefatti generati di grandi dimensioni
+*.log
