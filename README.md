@@ -4,7 +4,7 @@
 
 *Il nome viene dal film omonimo in cui il protagonista non ricorda nulla di ciò che ha fatto e sopravvive grazie a ciò che ha scritto: è il principio su cui il metodo si regge.*
 
-**Versione:** 4.5 – `28/08/2026`
+**Versione:** 4.6 – `28/08/2026`
 **Autori:** Alessia Ventani (alessia.ventani@uniurb.it); Michele Tomassini (michele.tomassini@uniurb.it) - Ufficio Servizi per la Transizione al Digitale - Università degli Studi di Urbino Carlo Bo
 **Licenza:** CC BY 4.0
 
@@ -50,11 +50,12 @@
 - [12. Interoperabilità e riuso](#12-interoperabilità-e-riuso)
 - [13. Applicazioni di riferimento ed esiti osservati](#13-applicazioni-di-riferimento-ed-esiti-osservati)
   - [13.1 I due progetti](#131-i-due-progetti)
-  - [13.2 Portabilità verificata](#132-portabilità-verificata)
-  - [13.3 Frequenza delle domande di chiarimento](#133-frequenza-delle-domande-di-chiarimento)
-  - [13.4 Numero di iterazioni](#134-numero-di-iterazioni)
-  - [13.5 Retroazione sui processi](#135-retroazione-sui-processi)
-  - [13.6 Efficienza e costo evitato](#136-efficienza-e-costo-evitato)
+  - [13.2 L'esito della revisione esterna](#132-lesito-della-revisione-esterna)
+  - [13.3 Portabilità verificata](#133-portabilità-verificata)
+  - [13.4 Frequenza delle domande di chiarimento](#134-frequenza-delle-domande-di-chiarimento)
+  - [13.5 Numero di iterazioni](#135-numero-di-iterazioni)
+  - [13.6 Retroazione sui processi](#136-retroazione-sui-processi)
+  - [13.7 Efficienza e costo evitato](#137-efficienza-e-costo-evitato)
 - [14. Limiti](#14-limiti)
 - [15. Riferimenti](#15-riferimenti)
 - [Appendice 1 – Che cos'è Git](#appendice-1--che-cosè-git)
@@ -823,7 +824,22 @@ Il dato più utile non è nessuno di questi numeri, ma il loro rapporto.
 Tredici giornate di lavoro effettivo su documentazione di questa mole non sarebbero state sufficienti con il metodo tradizionale, e non lo sarebbero nemmeno con un modello usato senza registri: sarebbe mancato ciò che permette di riprendere il lavoro il giorno dopo senza ricostruire il contesto.
 Il tempo risparmiato non viene dalla velocità di scrittura del modello, ma dal fatto che nessuna sessione ricomincia da zero.
 
-### 13.2 Portabilità verificata
+### 13.2 L'esito della revisione esterna
+
+Nel primo caso la revisione esterna ha coinvolto, di volta in volta, gli uffici competenti per le materie trattate, e ha impegnato circa tre giornate/persona complessive.
+I revisori hanno fornito pareri tecnici sui punti che ritenevano più delicati, integrando il testo dove necessario: le modifiche richieste sono state minime e l'impianto complessivo non è stato toccato.
+Il cieco è stato sciolto a revisione conclusa, prima dell'adozione.
+
+Interpellato dopo lo scioglimento, uno degli uffici revisori ha descritto l'esperienza; il giudizio è citato con il suo consenso, in forma anonima, per quello che dice e per quello che non nasconde.
+Sulla qualità: «Nel complesso, il documento offriva una base solida ed era decisamente completo, reggendo bene il confronto con testi analoghi».
+L'integrazione è venuta dove doveva venire: il revisore governa in prima persona alcuni dei processi trattati, le cui specifiche di dettaglio «erano in mio esclusivo possesso», e il suo apporto ha reso quelle spiegazioni «realmente precise, accurate e utilizzabili dal lettore».
+
+Sulla tenuta del cieco: il sospetto dell'uso di un modello è stato «molto lieve e del tutto circoscritto», limitato a «un paio di frasi» che il revisore ha attribuito a una rilettura assistita di quei soli passaggi: «Non ho affatto pensato a un testo generato da zero».
+Dopo lo scioglimento: «Il mio giudizio rimane del tutto invariato», con un testo giudicato «quasi del tutto indistinguibile dalla scrittura umana».
+
+La conclusione del revisore coincide con la tesi su cui il metodo è costruito, ed è tanto più credibile perché formulata da chi, mentre revisionava, non conosceva il metodo: «l'IA può preparare un ottimo contenitore teorico, ma il contributo di chi governa i processi sul campo resta indispensabile per arricchire quel contenitore con le specifiche operative che nessuna macchina può possedere».
+
+### 13.3 Portabilità verificata
 
 A mesi di distanza dalla chiusura dei due progetti, un modello di un fornitore diverso da quelli impiegati, senza alcun contatto con le persone coinvolte, ha ricostruito lo stato dei progetti leggendo soltanto i registri: che cosa era stato prodotto, quali fonti erano state usate, quali questioni erano rimaste aperte e perché le scelte erano state fatte in quel modo.
 Non è stato necessario parlare con nessuno.
@@ -831,7 +847,7 @@ Non è stato necessario parlare con nessuno.
 Nello stesso periodo, all'interno del primo dei due progetti, due strumenti di fornitori diversi hanno lavorato sullo stesso repository leggendo gli stessi registri, con perimetri scritti in file distinti.
 È un'evidenza diretta del principio di portabilità: il costo del passaggio è stato la sola analisi dei file del progetto.
 
-### 13.3 Frequenza delle domande di chiarimento
+### 13.4 Frequenza delle domande di chiarimento
 
 Nelle applicazioni di riferimento, le domande di chiarimento poste dal modello sono state **poco frequenti**, anche quando le istruzioni le sollecitavano espressamente.
 È l'osservazione da cui deriva la regola enunciata per la prima bozza: le domande vanno chieste, ma il controllo non può fondarsi su di esse.
@@ -842,12 +858,12 @@ Il modello, una volta ottenute le risposte dall'operatore, le rielabora e allarg
 L'esito mostra a che cosa serve il metodo: il modello non prende decisioni al posto dell'operatore.
 Quando non sa come procedere, pone una domanda.
 
-### 13.4 Numero di iterazioni
+### 13.5 Numero di iterazioni
 
 Nelle applicazioni di riferimento sono serviti da due a tre giri del ciclo di produzione per portare un documento dalla prima bozza a una versione consolidata.
 Il dato non è stato misurato in modo sistematico e cambia con l'estensione del corpus e con quanto è definito il mandato iniziale.
 
-### 13.5 Retroazione sui processi
+### 13.6 Retroazione sui processi
 
 Le lacune rilevate durante la revisione non riguardano soltanto il documento in lavorazione.
 Una parte di esse nasce a monte, nel modo in cui l'organizzazione lavora, e il fatto che emergano è un esito del metodo distinto dal documento prodotto.
@@ -863,7 +879,7 @@ La revisione però li rende visibili e documentati: il documento in lavorazione 
 L'esito dovrebbe essere raccolto in un elenco a parte, indirizzato alle strutture competenti, e può portare a interventi organizzativi (riattribuzione di competenze, ridefinizione di flussi, adozione di atti mancanti) che vanno oltre la produzione documentale.
 Quegli interventi non fanno parte del metodo descritto qui, ma il metodo li rende visibili.
 
-### 13.6 Efficienza e costo evitato
+### 13.7 Efficienza e costo evitato
 
 **Efficienza rispetto al metodo tradizionale.** Un manuale confrontabile, dello stesso ambito e della stessa mole, era stato prodotto in precedenza da una sola persona in circa otto mesi di tempo di calendario, svolti insieme agli altri compiti d'ufficio e con un risultato ancora incompleto.
 Con il metodo, un documento equivalente e pienamente tracciabile è stato completato in **otto giornate/persona effettive**.
