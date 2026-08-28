@@ -4,7 +4,7 @@
 
 *Il nome viene dal film omonimo in cui il protagonista non ricorda nulla di ciò che ha fatto e sopravvive grazie a ciò che ha scritto: è il principio su cui il metodo si regge.*
 
-**Versione:** 4.2 – `27/08/2026`
+**Versione:** 4.5 – `28/08/2026`
 **Autori:** Alessia Ventani (alessia.ventani@uniurb.it); Michele Tomassini (michele.tomassini@uniurb.it) - Ufficio Servizi per la Transizione al Digitale - Università degli Studi di Urbino Carlo Bo
 **Licenza:** CC BY 4.0
 
@@ -54,6 +54,7 @@
   - [13.3 Frequenza delle domande di chiarimento](#133-frequenza-delle-domande-di-chiarimento)
   - [13.4 Numero di iterazioni](#134-numero-di-iterazioni)
   - [13.5 Retroazione sui processi](#135-retroazione-sui-processi)
+  - [13.6 Efficienza e costo evitato](#136-efficienza-e-costo-evitato)
 - [14. Limiti](#14-limiti)
 - [15. Riferimenti](#15-riferimenti)
 - [Appendice 1 – Che cos'è Git](#appendice-1--che-cosè-git)
@@ -787,6 +788,11 @@ L'analisi di completezza verifica la coerenza del prodotto con il corpus normati
 **Interoperabilità giuridica.** Il metodo si fonda su licenze già in dotazione e su strumenti standard: non introduce vincoli contrattuali né barriere ulteriori.
 La tracciabilità garantita dai registri fornisce le evidenze che un'amministrazione deve poter mostrare sull'uso di sistemi di IA: che cosa è stato chiesto, che cosa è stato prodotto, chi ha deciso e chi ha convalidato.
 
+**Comunicazione e apertura.** L'iniziativa è pubblica su due piani.
+Verso l'esterno, il metodo è pubblicato per intero in un repository aperto, con licenza CC BY 4.0 e dichiarazione di licenza leggibile da una macchina secondo la specifica REUSE 3.3: chiunque può esaminarlo, riusarlo e proporne modifiche con una issue o una pull request, e la tracciabilità dei registri rende ispezionabile dall'esterno l'uso del sistema di IA.
+Verso l'interno, il metodo è documentato per intero ed è applicato nell'Ufficio Servizi per la Transizione al Digitale che lo ha prodotto: chi partecipa alla redazione lavora su registri scritti e condivisi, non su conoscenza tacita.
+Lo scioglimento del cieco previsto al termine della revisione esterna è il momento in cui questa apertura entra nel processo: ai revisori viene detto come il testo è stato prodotto, e i colleghi che convalidano i documenti sono così resi consapevoli, in modo esplicito, dell'uso del sistema di IA.
+
 **Contributi.** Il repository è aperto ai contributi.
 Osservazioni, correzioni e proposte di modifica si presentano con una issue o una pull request, oppure scrivendo al contatto indicato in fondo al documento.
 
@@ -856,6 +862,16 @@ Nessuno di questi problemi si risolve cambiando il testo.
 La revisione però li rende visibili e documentati: il documento in lavorazione funziona come strumento diagnostico sull'organizzazione che lo produce.
 L'esito dovrebbe essere raccolto in un elenco a parte, indirizzato alle strutture competenti, e può portare a interventi organizzativi (riattribuzione di competenze, ridefinizione di flussi, adozione di atti mancanti) che vanno oltre la produzione documentale.
 Quegli interventi non fanno parte del metodo descritto qui, ma il metodo li rende visibili.
+
+### 13.6 Efficienza e costo evitato
+
+**Efficienza rispetto al metodo tradizionale.** Un manuale confrontabile, dello stesso ambito e della stessa mole, era stato prodotto in precedenza da una sola persona in circa otto mesi di tempo di calendario, svolti insieme agli altri compiti d'ufficio e con un risultato ancora incompleto.
+Con il metodo, un documento equivalente e pienamente tracciabile è stato completato in **otto giornate/persona effettive**.
+Espresso nella stessa unità di misura, e nell'ipotesi prudente che solo una frazione di quegli otto mesi sia stata effettivamente dedicata al manuale (fra le 25 e le 40 giornate/persona effettive), il confronto indica una riduzione stimata **fra il 65 e l'80 per cento dello sforzo esperto**, con la consegna compressa da mesi a giorni e un risultato più completo.
+Il dato sullo sforzo tradizionale è una stima basata sul ricordo, ed è dichiarato come tale: è lo stesso principio per cui il metodo chiede che le assunzioni siano rese esplicite invece di essere presentate come misure.
+
+**Valore pubblico e costo evitato.** Il risultato è stato ottenuto senza alcuna infrastruttura dedicata e senza acquisti, su un server Linux già esistente e con licenze già in dotazione all'ente: il costo marginale del progetto è prossimo a zero.
+Oltre all'efficienza, il metodo produce valore che la sola scrittura tradizionale non replica: la tracciabilità verificabile dell'uso dell'IA (che cosa è stato chiesto, che cosa è stato prodotto, chi ha deciso e validato), un'accountability difendibile nel tempo e, come esito documentato, l'emersione di lacune organizzative che il testo da solo non avrebbe reso visibili.
 
 ---
 
@@ -949,7 +965,7 @@ Come si inizializza il repository e quale convenzione seguono i messaggi di comm
 
 Una precisazione utile a chi legge la cronologia:
 Git registra i documenti, non lo scambio con il modello.
-Le richieste e le risposte sono conservate in un registro dedicato, alimentato mentre la sessione si svolge ( [Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
+Le richieste e le risposte sono conservate in un registro dedicato, alimentato mentre la sessione si svolge ([Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
 Le due tracce sono complementari e nessuna sostituisce l'altra.
 
 ### Perché è stato scelto
