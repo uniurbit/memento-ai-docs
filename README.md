@@ -2,7 +2,7 @@
 
 ### Specifica di metodo per amministrazioni pubbliche
 
-*Il nome viene dal film di chi non ricorda nulla e sopravvive grazie a ciò che ha scritto: è il principio su cui il metodo si regge.*
+*Il nome viene dal film omonimo in cui il protagonista non ricorda nulla di ciò che ha fatto e sopravvive grazie a ciò che ha scritto: è il principio su cui il metodo si regge.*
 
 **Versione:** 4.2 – `27/08/2026`
 **Autori:** Alessia Ventani (alessia.ventani@uniurb.it); Michele Tomassini (michele.tomassini@uniurb.it) - Ufficio Servizi per la Transizione al Digitale - Università degli Studi di Urbino Carlo Bo
@@ -232,7 +232,7 @@ Può essere svolta da un tecnico dell'ente, una volta sola, e il responsabile de
 
 ### 6.2 Collocazione dell'ambiente e presenza di più utenti
 
-Il metodo non impone dove collocare l'ambiente, ma la scelta fra postazione personale e server condiviso incide sulla continuità del lavoro e sulla sua governabilità: le ragioni e le cautele sono nell'Appendice tecnica 3. Quando sullo stesso corpus lavorano più redattori, l'organizzazione dei rami e la soluzione dei conflitti sono descritte nell'Appendice tecnica 4, che riguarda una possibilità ancora da sperimentare.
+Il metodo non impone dove collocare l'ambiente, ma la scelta fra postazione personale e server condiviso incide sulla continuità del lavoro e sulla sua governabilità: le ragioni e le cautele sono nell'[Appendice tecnica 3](#appendice-tecnica-3--macchina-locale-e-server-condiviso). Quando sullo stesso corpus lavorano più redattori, l'organizzazione dei rami e la soluzione dei conflitti sono descritte nell'[Appendice tecnica 4](#appendice-tecnica-4--collaborazione-fra-più-redattori), che riguarda una possibilità ancora da sperimentare.
 
 ---
 ## 7. Fase 1 – Avvio del progetto e contesto
@@ -308,7 +308,7 @@ Il metodo usa quattro file, ciascuno con una sola funzione.
 | `CONVERSATION.md` | Che cosa è stato chiesto al modello e che cosa ha risposto? |
 
 `INSTRUCTIONS.md` contiene le regole che il modello deve seguire mentre lavora, comprese quelle che governano la scrittura degli altri registri.
-Il funzionamento dell'archivio delle interazioni è descritto nell'Appendice tecnica 1.
+Il funzionamento dell'archivio delle interazioni è descritto nell'[Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni).
 
 Tenere quattro registri distinti invece di uno solo non è una scelta di ordine, ma di funzionamento; il confronto fra i due casi lo mostra.
 - **Un registro unico.** Un solo file raccoglie regole, stato, attività e interazioni.
@@ -347,7 +347,7 @@ Stabilite le premesse, il lavoro comincia: si allestisce il repository, si scriv
 Il repository che contiene questo documento si copia con `git clone`.
 La copia porta con sé la cronologia di sviluppo del metodo, che non è la cronologia del progetto adottante e non DEVE diventarlo: una cronologia estranea rende inutilizzabile ogni ricostruzione successiva e confonde l'attribuzione delle modifiche.
 **La cartella `.git` DEVE quindi essere eliminata dopo la copia e ricreata da zero**, così che il primo commit del progetto coincida con il suo inizio effettivo.
-Chi non ha pratica di Git trova nell'Appendice 1 una spiegazione non tecnica di che cos'è, come funziona e perché il metodo lo adotta.
+Chi non ha pratica di Git trova nell'[Appendice 1](#appendice-1--che-cosè-git) una spiegazione non tecnica di che cos'è, come funziona e perché il metodo lo adotta.
 
 ```shell
 git clone [indirizzo-del-repository] nome-progetto
@@ -699,7 +699,7 @@ Al termine di ogni azione, e comunque di ogni scambio fra persona e modello, si 
 - `WORKLOG.md` riceve una voce se l'attività è significativa: un avanzamento del documento, una decisione presa, una verifica che cambia quanto ci si può fidare del risultato.
   NON DEVE essere scritta una voce per ogni singolo comando.
 - `PROJECT.md` si aggiorna solo quando cambia il quadro complessivo.
-- `CONVERSATION.md` è popolato dall'ambiente, o dal modello nei casi in cui l'ambiente non lo faccia (Appendice tecnica 2).
+- `CONVERSATION.md` è popolato dall'ambiente, o dal modello nei casi in cui l'ambiente non lo faccia ([Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
 - Il commit chiude l'iterazione, con la distinzione fra intervento umano e intervento del modello prescritta dalla convenzione sui messaggi di commit.
 
 ### 8.6 Condizione di uscita dal ciclo
@@ -949,7 +949,7 @@ Come si inizializza il repository e quale convenzione seguono i messaggi di comm
 
 Una precisazione utile a chi legge la cronologia:
 Git registra i documenti, non lo scambio con il modello.
-Le richieste e le risposte sono conservate in un registro dedicato, alimentato mentre la sessione si svolge (Appendice tecnica 2).
+Le richieste e le risposte sono conservate in un registro dedicato, alimentato mentre la sessione si svolge ( [Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
 Le due tracce sono complementari e nessuna sostituisce l'altra.
 
 ### Perché è stato scelto
