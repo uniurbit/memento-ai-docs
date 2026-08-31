@@ -10,19 +10,25 @@
 >
 > Le parole **DEVE**, **NON DEVE**, **DOVREBBE**, **PUÒ** in maiuscolo hanno
 > l'interpretazione univoca definita in `README.md`, §2.
+>
+> **Lingua.** Queste sono le regole operative in italiano. L'inglese è la lingua
+> della radice del kit; le altre lingue stanno in `lang/`, ciascuna in una
+> cartella che riproduce la stessa struttura con gli stessi nomi di file. Una
+> lingua si sceglie in fase di allestimento e `lang/` viene rimossa
+> (`README.md`, Appendice tecnica 5).
 
 ---
 
 ## 1. Ambito e precedenza
 
-Questo file specifica **come si lavora**. `AVVIO_PROGETTO.md` specifica **che
+Questo file specifica **come si lavora**. `PROJECT_BRIEF.md` specifica **che
 cosa si deve produrre**. `README.md` specifica **perché il metodo è fatto così**.
 
 In caso di prescrizioni fra loro incompatibili si applica il seguente ordine di
 precedenza:
 
 1. Una richiesta esplicita dell'utente nella sessione corrente.
-2. `AVVIO_PROGETTO.md` (mandato, perimetro, ruoli).
+2. `PROJECT_BRIEF.md` (mandato, perimetro, ruoli).
 3. Questo file.
 4. `README.md`.
 
@@ -40,20 +46,27 @@ attività materiale.
 
 1. Eseguire `git status`. Le modifiche locali non riconosciute NON DEVONO essere
    nascoste, annullate o incorporate: vanno segnalate.
-2. Se esiste un repository remoto, eseguire `git fetch`. DEVONO essere accettati
+2. **Verificare che il progetto contenga una sola lingua.** La cartella `lang/`
+   NON DEVE essere presente: la sua rimozione è prescritta all'inizializzazione
+   del repository (`README.md`, Appendice tecnica 5). Se è ancora lì, il modello
+   DEVE segnalarlo e DEVE chiedere all'utente quale lingua tenere prima di
+   procedere. Due copie di documenti vincolanti divergono senza che nessuno se
+   ne accorga, e quella che viene letta non è necessariamente quella che è
+   stata aggiornata.
+3. Se esiste un repository remoto, eseguire `git fetch`. DEVONO essere accettati
    soltanto avanzamenti lineari. Ogni divergenza DEVE essere segnalata e NON
    DEVE essere risolta autonomamente.
-3. Leggere integralmente `AVVIO_PROGETTO.md`.
-4. Leggere integralmente questo file.
-5. Leggere integralmente `registri/PROJECT.md`.
-6. Leggere la porzione finale di `registri/WORKLOG.md`, sufficiente a coprire le
+4. Leggere integralmente `PROJECT_BRIEF.md`.
+5. Leggere integralmente questo file.
+6. Leggere integralmente `REGISTERS/PROJECT.md`.
+7. Leggere la porzione finale di `REGISTERS/WORKLOG.md`, sufficiente a coprire le
    ultime attività; cercarvi le voci pertinenti al compito richiesto.
-7. Prendere cognizione delle fonti disponibili in `contesto/`: leggerne il
+8. Prendere cognizione delle fonti disponibili in `CONTEXT/`: leggerne il
    manifest quando esiste, altrimenti l'elenco dei file. Gli scostamenti
    rispetto al perimetro dichiarato nel mandato DEVONO essere segnalati. Le
    singole fonti si aprono quando il compito lo richiede, non per prassi.
 
-`registri/CONVERSATION.md` NON DEVE essere caricato in contesto. Si consulta
+`REGISTERS/CONVERSATION.md` NON DEVE essere caricato in contesto. Si consulta
 esclusivamente con ricerche mirate, quando occorre il testo originale di una
 richiesta o di una risposta.
 
@@ -125,8 +138,8 @@ registrato con una voce di worklog e chiuso con un commit.
 
 ### 3.2 Cartelle e file
 
-- Il contenuto delle fonti in `contesto/` NON DEVE essere modificato.
-- La composizione di `contesto/` PUÒ essere modificata — aggiunta, rimozione,
+- Il contenuto delle fonti in `CONTEXT/` NON DEVE essere modificato.
+- La composizione di `CONTEXT/` PUÒ essere modificata — aggiunta, rimozione,
   riclassificazione — quando ricorra una ragione. La ragione DEVE essere
   annotata nel manifest e nel worklog.
 - Il manifest delle fonti DEVE essere aggiornato contestualmente
@@ -135,8 +148,8 @@ registrato con una voce di worklog e chiuso con un commit.
   della copia locale, ragione dell'acquisizione.
 - Una fonte reperita per via indiretta o sostitutiva DEVE essere annotata come
   tale nel manifest.
-- `rilascio/` NON DEVE essere modificata manualmente dopo l'esportazione.
-- `strumenti/` contiene lo script di cattura delle interazioni (§4.1). NON DEVE
+- `RELEASE/` NON DEVE essere modificata manualmente dopo l'esportazione.
+- `TOOLS/` contiene lo script di cattura delle interazioni (§4.1). NON DEVE
   essere modificato durante la lavorazione, salvo per l'adattamento allo
   strumento in uso, che DEVE essere registrato nel worklog.
 - Le bozze risiedono nella radice del progetto o in una cartella dedicata, in
@@ -256,21 +269,21 @@ Uno script agganciato allo strumento registra entrambe le estremità di ogni
 turno. È il modo da preferire ovunque sia praticabile: è deterministico, copia
 il testo senza rielaborarlo e non consuma risorse di elaborazione.
 
-Il template fornisce l'implementazione: `strumenti/registra_interazione.py`.
+Il template fornisce l'implementazione: `TOOLS/record_interaction.py`.
 Richiede Python 3 e la sola libreria standard. Va agganciato ai due eventi che
 lo strumento espone — invio della richiesta e completamento della risposta —
 secondo la sintassi di configurazione del prodotto in uso. Esempio di aggancio,
 in forma generica:
 
 ```
-evento «richiesta inviata»      → python3 strumenti/registra_interazione.py
-evento «risposta completata»    → python3 strumenti/registra_interazione.py
+evento «richiesta inviata»      → python3 TOOLS/record_interaction.py
+evento «risposta completata»    → python3 TOOLS/record_interaction.py
 ```
 
 Lo script riconosce da sé quale dei due eventi lo ha invocato. Se lo strumento
 non dichiara il tipo di evento, questo va passato come primo argomento
-(`richiesta` oppure `risposta`). L'adattamento a uno strumento diverso richiede
-la modifica della sola sezione `ADATTATORE` in testa allo script.
+(`request` oppure `answer`). L'adattamento a uno strumento diverso richiede
+la modifica della sola sezione `ADAPTER` in testa allo script.
 
 **La copertura DEVE essere completa.** Una configurazione che intercetti un solo
 evento **non è conforme**: produce un archivio che conserva metà di ogni turno
@@ -282,7 +295,7 @@ modi di cattura mescolati nello stesso archivio.
 sé l'aggancio, né modificare la configurazione dello strumento per attivarlo: il
 soggetto che verrebbe registrato non autorizza il proprio registratore. Il
 modello PUÒ predisporre la dichiarazione e DEVE indicare all'utente che
-l'abilitazione resta a suo carico. La procedura è in `README.md`, §6.3.
+l'abilitazione resta a suo carico. La procedura è in `README.md`, Appendice tecnica 2.
 
 **Verifica all'adozione.** Alla prima sessione dopo l'aggancio DEVE essere
 verificato che l'archivio contenga entrambe le estremità del turno. Il modello
@@ -325,18 +338,23 @@ archivio deve restare leggibile anche quando il progetto passa da un caso
 all'altro.
 
 ```markdown
-<!-- interazione:<sessione>:<turno>:richiesta -->
-## Richiesta — 2026-08-26T17:04:11+02:00 — cattura: ambiente
+<!-- interaction:<sessione>:<turno>:request -->
+## Request — 2026-08-26T17:04:11+02:00 — capture: environment
 
 testo verbatim della richiesta
 
-<!-- interazione:<sessione>:<turno>:risposta -->
-## Risposta — 2026-08-26T17:06:02+02:00 — cattura: ambiente
+<!-- interaction:<sessione>:<turno>:answer -->
+## Answer — 2026-08-26T17:06:02+02:00 — capture: environment
 
 testo verbatim della risposta finale
 ```
 
-Nel Caso B la dichiarazione è `cattura: modello`. Il file si apre con
+Marcatori ed etichette del record sono in inglese anche nei progetti in
+italiano: lo script di cattura è uno solo, e quelle stringhe sono impalcatura
+leggibile da una macchina, non prosa. Il testo registrato resta verbatim nella
+lingua in cui è stato scritto.
+
+Nel Caso B la dichiarazione è `capture: model`. Il file si apre con
 l'intestazione `# Conversazione`, che la prima scrittura crea se assente.
 
 ### 4.2 Worklog
@@ -445,8 +463,9 @@ Il messaggio dice **che cosa** è cambiato. Il **perché** va nel worklog.
 
 ## 6. Riferimento rapido
 
-**All'apertura:** `git status` → `git fetch` se remoto → `AVVIO_PROGETTO.md` →
-questo file → `PROJECT.md` → coda di `WORKLOG.md` → manifest di `contesto/` →
+**All'apertura:** `git status` → verifica che `lang/` non sia presente →
+`git fetch` se remoto → `PROJECT_BRIEF.md` →
+questo file → `PROJECT.md` → coda di `WORKLOG.md` → manifest di `CONTEXT/` →
 dichiarazione di lettura in quattro righe.
 
 **Durante:** eseguire le fasi nell'ordine · analisi di completezza dopo la

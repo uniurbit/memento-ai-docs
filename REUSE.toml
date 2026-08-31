@@ -1,11 +1,12 @@
-# Dichiarazione di licenza leggibile da una macchina, secondo la specifica
-# REUSE 3.3 della Free Software Foundation Europe (https://reuse.software/spec-3.3/).
+# Machine-readable licensing declaration, following the REUSE 3.3
+# specification of the Free Software Foundation Europe
+# (https://reuse.software/spec-3.3/).
 #
-# Il repository ha una sola licenza, CC BY 4.0, che copre ogni file: il testo
-# della specifica, i template compilabili e lo script di cattura delle
-# interazioni. Questo file non aggiunge una seconda licenza: rende la stessa
-# dichiarazione leggibile file per file da uno strumento automatico, che è la
-# forma attesa dall'ecosistema europeo del riuso.
+# The repository has a single licence, CC BY 4.0, covering every file: the text
+# of the specification, the fillable templates and the interaction-capture
+# script. This file adds no second licence: it makes the same declaration
+# readable file by file by an automated tool, which is the form the European
+# reuse ecosystem expects.
 
 version = 1
 

@@ -9,22 +9,26 @@
 > Le **regole operative** — ordine di lettura, procedure di apertura e di
 > chiusura del turno, aggiornamento dei registri, interpretazione delle
 > annotazioni dell'utente nei file, uso di Git — non sono qui: risiedono in
-> `registri/INSTRUCTIONS.md`.
+> `REGISTERS/INSTRUCTIONS.md`.
 >
-> **`registri/INSTRUCTIONS.md` DEVE essere letto integralmente subito dopo
+> **`REGISTERS/INSTRUCTIONS.md` DEVE essere letto integralmente subito dopo
 > questo file, e osservato per tutta la lavorazione.** Le sue prescrizioni sono
 > vincolanti e non ammettono interpretazione discrezionale. Nessuna attività
 > materiale DEVE essere avviata prima di averlo letto.
 >
-> La sequenza di apertura prescritta da `registri/INSTRUCTIONS.md`, §2 comprende
+> La sequenza di apertura prescritta da `REGISTERS/INSTRUCTIONS.md`, §2 comprende
 > la lettura dei registri di stato e di attività e la ricognizione delle fonti
-> presenti in `contesto/`. La lettura di questo file è pertanto sufficiente ad
+> presenti in `CONTEXT/`. La lettura di questo file è pertanto sufficiente ad
 > avviare la sessione: non occorre elencare al modello i documenti da aprire.
 >
 > **Le sezioni da 1 a 6 DEVONO essere compilate prima dell'acquisizione delle
 > fonti.** La compilazione del mandato è il primo atto della Fase 1 del metodo
-> (§7.6 della specifica); la sezione 7 è fornita compilata e vale per qualunque
+> (§7.2.2 della specifica); la sezione 7 è fornita compilata e vale per qualunque
 > progetto.
+>
+> **Lingua.** Questo è il mandato in italiano. L'inglese è la lingua della radice
+> del kit; le altre lingue stanno in `lang/`, e `lang/` viene rimossa in fase di
+> allestimento (`README.md`, Appendice tecnica 5).
 
 ---
 
@@ -58,7 +62,7 @@ formalizzate mediante fonti normative e documenti istituzionali.]`
 convenzioni linguistiche; formato di lavoro; vincoli di neutralità tecnologica.]`
 
 **Documenti da non impiegare come base.** `[Elenco dei documenti presenti in
-`contesto/` a soli fini di inquadramento. In assenza di questo elenco il modello
+`CONTEXT/` a soli fini di inquadramento. In assenza di questo elenco il modello
 attribuisce loro il medesimo peso delle fonti principali.]`
 
 ---
@@ -92,12 +96,12 @@ ruoli obbligatoria. Il modello non esercita potere decisionale in alcun ruolo.
 
 ```
 progetto/
-├── AVVIO_PROGETTO.md   questo file: il mandato
+├── PROJECT_BRIEF.md   questo file: il mandato
 ├── README.md           il metodo e le sue motivazioni; non si legge a ogni sessione
-├── contesto/           documentazione di riferimento (input)
-├── rilascio/           versioni finali esportate (output)
-├── strumenti/          script di cattura delle interazioni
-└── registri/
+├── CONTEXT/           documentazione di riferimento (input)
+├── RELEASE/           versioni finali esportate (output)
+├── TOOLS/          script di cattura delle interazioni
+└── REGISTERS/
     ├── INSTRUCTIONS.md   le regole operative: vincolanti, si leggono sempre
     ├── PROJECT.md        stato del progetto
     ├── WORKLOG.md        attività svolte, con verifiche ed esito
@@ -109,8 +113,8 @@ diffusione leggono all'avvio un file di istruzioni la cui denominazione varia pe
 prodotto. Tale file DEVE limitarsi a rinviare a questo documento:
 
 ```markdown
-All'inizio di ogni sessione leggere integralmente `AVVIO_PROGETTO.md`,
-quindi `registri/INSTRUCTIONS.md`, e attenersi a quest'ultimo per l'intera
+All'inizio di ogni sessione leggere integralmente `PROJECT_BRIEF.md`,
+quindi `REGISTERS/INSTRUCTIONS.md`, e attenersi a quest'ultimo per l'intera
 lavorazione.
 ```
 

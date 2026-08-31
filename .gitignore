@@ -1,16 +1,22 @@
-# Segreti e credenziali: non devono mai entrare nel repository
+# Secrets and credentials: these must never enter the repository
 .env
 *.key
 *.pem
 credenziali*
 segreti*
+credentials*
+secrets*
 
-# File temporanei del sistema e degli editor
+# Temporary files of the system and of editors
 .DS_Store
 Thumbs.db
 *~
 *.swp
 *.tmp
 
-# Esportazioni intermedie e artefatti generati di grandi dimensioni
+# Intermediate exports and large generated artefacts
 *.log
+
+# Python interpreter cache
+__pycache__/
+*.pyc

@@ -1,1177 +1,1279 @@
-# Memento – Produzione e revisione documentale assistita da IA
+**English** · other languages of the kit: [Italiano](https://github.com/uniurbit/memento-ai-docs/blob/main/lang/it/README.md)
 
-### Specifica di metodo per amministrazioni pubbliche
+# Memento – AI-assisted document drafting and review
 
-*Il nome viene dal film omonimo in cui il protagonista non ricorda nulla di ciò che ha fatto e sopravvive grazie a ciò che ha scritto: è il principio su cui il metodo si regge.*
+### Method specification for public administrations
 
-**Versione:** 4.6 – `28/08/2026`
-**Autori:** Alessia Ventani (alessia.ventani@uniurb.it); Michele Tomassini (michele.tomassini@uniurb.it) - Ufficio Servizi per la Transizione al Digitale - Università degli Studi di Urbino Carlo Bo
-**Licenza:** CC BY 4.0
+*The name comes from the film of the same title, whose protagonist remembers nothing of what he has done and survives thanks to what he has written down: it is the principle the method rests on.*
 
----
-## Sommario
-
-- [1. Sintesi](#1-sintesi)
-  - [1.1 Natura di questo documento](#11-natura-di-questo-documento)
-- [2. Parole chiave](#2-parole-chiave)
-- [3. Definizioni](#3-definizioni)
-- [4. Architettura del metodo](#4-architettura-del-metodo)
-- [5. Principi](#5-principi)
-- [6. Fase 0 – Ambiente](#6-fase-0--ambiente)
-  - [6.1 Requisiti e installazione](#61-requisiti-e-installazione)
-  - [6.2 Collocazione dell'ambiente e presenza di più utenti](#62-collocazione-dellambiente-e-presenza-di-più-utenti)
-- [7. Fase 1 – Avvio del progetto e contesto](#7-fase-1--avvio-del-progetto-e-contesto)
-  - [7.1 Considerazioni preliminari e la cartella di progetto](#71-considerazioni-preliminari-e-la-cartella-di-progetto)
-    - [7.1.1 Ruoli del processo di redazione](#711-ruoli-del-processo-di-redazione)
-    - [7.1.2 Verifiche preliminari](#712-verifiche-preliminari)
-    - [7.1.3 La cartella di progetto](#713-la-cartella-di-progetto)
-      - [7.1.3.1 Le cartelle](#7131-le-cartelle)
-      - [7.1.3.2 I registri](#7132-i-registri)
-      - [7.1.3.3 Gestione di Git](#7133-gestione-di-git)
-  - [7.2 Prime fasi operative](#72-prime-fasi-operative)
-    - [7.2.1 Inizializzazione del repository](#721-inizializzazione-del-repository)
-    - [7.2.2 Redazione del documento di avvio](#722-redazione-del-documento-di-avvio)
-    - [7.2.3 Acquisizione delle fonti](#723-acquisizione-delle-fonti)
-    - [7.2.4 Elaborazione del file di avvio](#724-elaborazione-del-file-di-avvio)
-    - [7.2.5 Redazione del manifest](#725-redazione-del-manifest)
-      - [7.2.5.1 Fonti non acquisibili direttamente](#7251-fonti-non-acquisibili-direttamente)
-    - [7.2.6 Verifica del mandato e uscita dalla fase](#726-verifica-del-mandato-e-uscita-dalla-fase)
-- [8. Fase 2 – Ciclo di produzione](#8-fase-2--ciclo-di-produzione)
-  - [8.1 Azione 2.1 - Prima bozza](#81-azione-21---prima-bozza)
-  - [8.2 Azione 2.2 – Modifica della documentazione](#82-azione-22--modifica-della-documentazione)
-  - [8.3 Azione 2.3 – Revisione umana](#83-azione-23--revisione-umana)
-  - [8.4 Azione 2.4 – Analisi di completezza](#84-azione-24--analisi-di-completezza)
-    - [8.4.1 Dati non disponibili](#841-dati-non-disponibili)
-  - [8.5 Aggiornamento dei registri e commit](#85-aggiornamento-dei-registri-e-commit)
-  - [8.6 Condizione di uscita dal ciclo](#86-condizione-di-uscita-dal-ciclo)
-- [9. Fase 3 – Revisione esterna](#9-fase-3--revisione-esterna)
-- [10. Fase 4 – Rilascio](#10-fase-4--rilascio)
-- [11. Fase 5 – Revisioni di medio periodo](#11-fase-5--revisioni-di-medio-periodo)
-- [12. Interoperabilità e riuso](#12-interoperabilità-e-riuso)
-- [13. Applicazioni di riferimento ed esiti osservati](#13-applicazioni-di-riferimento-ed-esiti-osservati)
-  - [13.1 I due progetti](#131-i-due-progetti)
-  - [13.2 L'esito della revisione esterna](#132-lesito-della-revisione-esterna)
-  - [13.3 Portabilità verificata](#133-portabilità-verificata)
-  - [13.4 Frequenza delle domande di chiarimento](#134-frequenza-delle-domande-di-chiarimento)
-  - [13.5 Numero di iterazioni](#135-numero-di-iterazioni)
-  - [13.6 Retroazione sui processi](#136-retroazione-sui-processi)
-  - [13.7 Efficienza e costo evitato](#137-efficienza-e-costo-evitato)
-- [14. Limiti](#14-limiti)
-- [15. Riferimenti](#15-riferimenti)
-- [Appendice 1 – Che cos'è Git](#appendice-1--che-cosè-git)
-  - [Che cos'è](#che-cosè)
-  - [Come funziona](#come-funziona)
-  - [Come viene usato nel metodo](#come-viene-usato-nel-metodo)
-  - [Perché è stato scelto](#perché-è-stato-scelto)
-  - [Che cos'è Markdown](#che-cosè-markdown)
-- [Appendice tecnica 2 – L'archivio delle interazioni](#appendice-tecnica-2--larchivio-delle-interazioni)
-  - [Aggancio e abilitazione dello script](#aggancio-e-abilitazione-dello-script)
-- [Appendice tecnica 3 – Macchina locale e server condiviso](#appendice-tecnica-3--macchina-locale-e-server-condiviso)
-- [Appendice tecnica 4 – Collaborazione fra più redattori](#appendice-tecnica-4--collaborazione-fra-più-redattori)
+**Version:** 4.9 – `31/08/2026`
+**Authors:** Alessia Ventani (alessia.ventani@uniurb.it); Michele Tomassini (michele.tomassini@uniurb.it) – Ufficio Servizi per la Transizione al Digitale (Digital Transition Services Office) – Università degli Studi di Urbino Carlo Bo
+**Licence:** CC BY 4.0
+**Language.** This English version is the official text. Work in one language only: see [Language of the kit](#63-language-of-the-kit).
 
 ---
+## Contents
 
-## 1. Sintesi
+- [1. Overview](#1-overview)
+  - [1.1 The nature of this document](#11-the-nature-of-this-document)
+- [2. Key words](#2-key-words)
+- [3. Definitions](#3-definitions)
+- [4. Method architecture](#4-method-architecture)
+- [5. Principles](#5-principles)
+- [6. Phase 0 – Environment](#6-phase-0--environment)
+  - [6.1 Requirements and installation](#61-requirements-and-installation)
+  - [6.2 Where the environment lives, and multiple users](#62-where-the-environment-lives-and-multiple-users)
+  - [6.3 Language of the kit](#63-language-of-the-kit)
+- [7. Phase 1 – Project start-up and context](#7-phase-1--project-start-up-and-context)
+  - [7.1 Preliminary considerations and the project folder](#71-preliminary-considerations-and-the-project-folder)
+    - [7.1.1 Roles in the drafting process](#711-roles-in-the-drafting-process)
+    - [7.1.2 Preliminary checks](#712-preliminary-checks)
+    - [7.1.3 The project folder](#713-the-project-folder)
+      - [7.1.3.1 The folders](#7131-the-folders)
+      - [7.1.3.2 The registers](#7132-the-registers)
+      - [7.1.3.3 Managing Git](#7133-managing-git)
+  - [7.2 First operational steps](#72-first-operational-steps)
+    - [7.2.1 Initialising the repository](#721-initialising-the-repository)
+    - [7.2.2 Drafting the project brief](#722-drafting-the-project-brief)
+    - [7.2.3 Acquiring the sources](#723-acquiring-the-sources)
+    - [7.2.4 Processing the project brief](#724-processing-the-project-brief)
+    - [7.2.5 Drafting the manifest](#725-drafting-the-manifest)
+      - [7.2.5.1 Sources that cannot be acquired directly](#7251-sources-that-cannot-be-acquired-directly)
+    - [7.2.6 Checking the mandate and leaving the phase](#726-checking-the-mandate-and-leaving-the-phase)
+- [8. Phase 2 – Production cycle](#8-phase-2--production-cycle)
+  - [8.1 Action 2.1 – First draft](#81-action-21--first-draft)
+  - [8.2 Action 2.2 – Amending the documentation](#82-action-22--amending-the-documentation)
+  - [8.3 Action 2.3 – Human review](#83-action-23--human-review)
+  - [8.4 Action 2.4 – Completeness analysis](#84-action-24--completeness-analysis)
+    - [8.4.1 Unavailable data](#841-unavailable-data)
+  - [8.5 Updating the registers and committing](#85-updating-the-registers-and-committing)
+  - [8.6 Exit condition for the cycle](#86-exit-condition-for-the-cycle)
+- [9. Phase 3 – External review](#9-phase-3--external-review)
+- [10. Phase 4 – Release](#10-phase-4--release)
+- [11. Phase 5 – Medium-term reviews](#11-phase-5--medium-term-reviews)
+- [12. Interoperability and reuse](#12-interoperability-and-reuse)
+- [13. Reference applications and observed outcomes](#13-reference-applications-and-observed-outcomes)
+  - [13.1 The two projects](#131-the-two-projects)
+  - [13.2 The outcome of the external review](#132-the-outcome-of-the-external-review)
+  - [13.3 Portability, verified](#133-portability-verified)
+  - [13.4 Frequency of clarification questions](#134-frequency-of-clarification-questions)
+  - [13.5 Number of iterations](#135-number-of-iterations)
+  - [13.6 Feedback on the processes](#136-feedback-on-the-processes)
+  - [13.7 Efficiency and cost avoided](#137-efficiency-and-cost-avoided)
+- [14. Limitations](#14-limitations)
+- [15. References](#15-references)
+- [Appendix 1 – What Git is](#appendix-1--what-git-is)
+  - [What it is](#what-it-is)
+  - [How it works](#how-it-works)
+  - [How the method uses it](#how-the-method-uses-it)
+  - [Why it was chosen](#why-it-was-chosen)
+  - [What Markdown is](#what-markdown-is)
+- [Technical appendix 2 – The interaction archive](#technical-appendix-2--the-interaction-archive)
+  - [Hooking up and enabling the script](#hooking-up-and-enabling-the-script)
+- [Technical appendix 3 – Local machine and shared server](#technical-appendix-3--local-machine-and-shared-server)
+- [Technical appendix 4 – Collaboration between several drafters](#technical-appendix-4--collaboration-between-several-drafters)
+- [Technical appendix 5 – Languages of the kit](#technical-appendix-5--languages-of-the-kit)
 
-Questo documento descrive un metodo di lavoro replicabile per scrivere e rivedere documentazione amministrativa complessa (regolamenti, manuali, procedure) con l'aiuto di modelli linguistici usati da riga di comando, dentro un flusso di lavoro versionato con Git.
+---
 
-Il metodo si propone di offrire una soluzione a un problema che è comune a molte amministrazioni: scrivere documentazione normativa e gestionale complessa richiede molto lavoro di personale esperto, e garantire che il testo sia completo e coerente diventa difficile quando le norme da rispettare e i documenti da reperire sono numerosi.
+## 1. Overview
 
-Il metodo mette insieme tre componenti già diffusi e maturi:
+This document describes a replicable working method for drafting and reviewing complex administrative documentation (regulations, manuals, procedures) with the help of language models used from the command line, within a workflow versioned with Git.
 
-- un **modello** linguistico usato da riga di comando, sia per scrivere sia per rivedere;
-- un **repository Git**, che rende ogni modifica tracciabile, attribuibile a chi l'ha fatta e reversibile;
-- un **processo iterativo fra persona e modello**, in cui la persona guida, decide e convalida a ogni passo.
+The method sets out to address a problem common to many administrations: writing complex regulatory and management documentation takes a great deal of expert staff time, and making sure the text is complete and consistent becomes difficult when the rules to be complied with and the documents to be retrieved are numerous.
 
-Il risultato atteso è una riduzione sensibile dei tempi di produzione, e un aumento di qualità verificata.
+The method brings together three components that are already widespread and mature:
 
-Il metodo **non dipende dal modello impiegato** e non richiede di sviluppare software: usa strumenti flessibili e licenze di norma già disponibili nell'ente.
+- a language **model**, used from the command line both to write and to review;
+- a **Git repository**, which makes every change traceable, attributable to whoever made it, and reversible;
+- an **iterative process between person and model**, in which the person leads, decides and validates at every step.
 
-Il metodo nasce dall'esperienza di chi lo ha scritto nella produzione di documentazione amministrativa reale.
-Non per questo è un formato rigido: fasi, registri e convenzioni sono ridotti all'essenziale e si prestano a essere adattati a enti di dimensioni diverse, a materie diverse, a organizzazioni e strumenti diversi.
-Ciò che deve restare in ogni adattamento è il nucleo dei principi; il modo in cui le fasi sono organizzate può essere cambiato quando il contesto lo richiede.
+The expected result is a substantial reduction in production time, together with an increase in verified quality.
 
-### 1.1 Natura di questo documento
+The method **does not depend on the model employed** and requires no software development: it uses flexible tools and licences that an administration will normally already have.
 
-Questo documento è insieme la specifica del metodo e il file di ingresso di un progetto che ne è l'implementazione di riferimento.
-La struttura riprodotta qui sotto non è un esempio: è l'articolazione necessaria per utilizzare il metodo.
+The method grew out of its authors' experience in producing real administrative documentation.
+That does not make it a rigid format: phases, registers and conventions are pared down to the essentials and lend themselves to adaptation to administrations of different sizes, to different subject matters, to different organisations and tools.
+What must survive in any adaptation is the core of the principles; the way the phases are organised may be changed when the context calls for it.
+
+### 1.1 The nature of this document
+
+This document is at once the specification of the method and the entry file of a project that is its reference implementation.
+The structure reproduced below is not an example: it is the articulation required in order to use the method.
 
 ```
-progetto/
-├── AVVIO_PROGETTO.md   mandato del progetto; si legge per primo
-├── README.md           il presente documento
-├── contesto/           documentazione di riferimento acquisita dall'ente
-├── immagini/           figure del presente documento
-├── rilascio/           versioni finali esportate
-├── strumenti/          script di cattura delle interazioni (App. tecnica 2)
-└── registri/
-    ├── INSTRUCTIONS.md   fornito compilato: regole operative del metodo
-    ├── PROJECT.md        vuoto
-    ├── WORKLOG.md        vuoto
-    └── CONVERSATION.md   vuoto; popolato automaticamente dall'ambiente
+project/
+├── PROJECT_BRIEF.md    the project mandate; read first
+├── README.md           this document
+├── CONTEXT/            reference documentation acquired by the administration
+├── RELEASE/            final exported versions
+├── TOOLS/              interaction-capture script (Technical appendix 2)
+├── images/             figures for this document
+└── REGISTERS/
+    ├── INSTRUCTIONS.md   supplied ready-written: the operating rules of the method
+    ├── PROJECT.md        empty
+    ├── WORKLOG.md        empty
+    └── CONVERSATION.md   empty; populated automatically by the environment
 ```
 
-L'adozione richiede due momenti, entrambi descritti nel documento: l'allestimento tecnico dell'ambiente, che si esegue una volta sola e può essere affidato a un tecnico, e l'avvio del progetto vero e proprio (repository, registri, ruoli, verifiche preliminari, mandato e contesto) che è la Fase 1.
+Folders written in capitals are the ones the method works with; those written in lower case serve the document itself.
+The one exception is `LICENSES/`, whose name is prescribed by the REUSE specification and cannot be changed.
+
+The kit ships in more than one language: the tree above is the English one, and the other languages sit in `lang/`, each in a folder of its own that mirrors this same structure.
+The tree above is therefore also the working structure, that is, what remains after the choice of language prescribed in [Language of the kit](#63-language-of-the-kit).
+
+Adoption takes two moments, both described in this document: the technical set-up of the environment, which is done once only and may be entrusted to a technician, and the start-up of the project proper (repository, registers, roles, preliminary checks, mandate and context), which is Phase 1.
 
 ---
 
-## 2. Parole chiave
+## 2. Key words
 
-Le parole seguenti, quando compaiono in maiuscolo, hanno in questo documento **un solo significato** e non ammettono le sfumature che il linguaggio corrente attribuirebbe loro.
-Servono a rendere visibile, e non solo intuibile, quanto ciascuna prescrizione sia vincolante.
+The words below, when they appear in capitals, have **one meaning only** in this document, and do not admit the shades of meaning that everyday language would give them.
+They serve to make visible, and not merely inferable, how binding each prescription is.
 
-| Parola chiave | Interpretazione |
+| Key word | Interpretation |
 | :---- | :---- |
-| **DEVE** / **NON DEVE** | Requisito assoluto. Se non viene rispettato, il risultato non è più verificabile o tracciabile. |
-| **DOVREBBE** / **NON DOVREBBE** | Raccomandazione. Sono ammesse eccezioni motivate, di cui va tenuta traccia. |
-| **PUÒ** | Facoltà. L'elemento è opzionale e ometterlo non compromette il risultato. |
+| **MUST** / **MUST NOT** | Absolute requirement. If it is not observed, the result is no longer verifiable or traceable. |
+| **SHOULD** / **SHOULD NOT** | Recommendation. Reasoned exceptions are admissible, and a record of them must be kept. |
+| **MAY** | Option. The element is optional and omitting it does not compromise the result. |
 
-Le stesse parole, scritte in minuscolo, hanno il valore corrente della lingua e non esprimono un obbligo.
+The same words written in lower case carry their ordinary meaning and express no obligation.
 
 ---
 
-## 3. Definizioni
+## 3. Definitions
 
-**Modello.** Il modello linguistico di grandi dimensioni (LLM) usato per scrivere e rivedere i testi.
-In questo documento il termine indica sempre e soltanto questo componente, e non se ne usano sinonimi.
+**Model.** The large language model (LLM) used to write and review the texts.
+In this document the term always and only means this component, and no synonyms for it are used.
 
-**Strumento.** Il programma a riga di comando attraverso cui si usa il modello.
-Modello e strumento sono componenti distinti e sostituibili l'uno indipendentemente dall'altro.
+**Tool.** The command-line program through which the model is used.
+Model and tool are distinct components, each replaceable independently of the other.
 
-**Cartella di progetto.** L'area di lavoro che contiene l'intero progetto: le fonti, le bozze, i registri e la cronologia delle modifiche.
-Poiché quella cronologia è tenuta da Git, la stessa cartella si chiama anche *repository*: i due termini indicano la stessa cosa vista da due lati, l'area di lavoro e l'archivio delle sue versioni.
-Che cosa sia un repository, e come funzioni, è spiegato nell'[Appendice 1](#appendice-1--che-cosè-git).
+**Project folder.** The working area that holds the whole project: the sources, the drafts, the registers and the history of the changes.
+Since that history is kept by Git, the same folder is also called a *repository*: the two terms denote the same thing seen from two sides, the working area and the archive of its versions.
+What a repository is, and how it works, is explained in [Appendix 1](#appendix-1--what-git-is).
 
-**Contesto.** L'insieme dei documenti di riferimento raccolti per la redazione: normativa sovraordinata, atti collegati, versioni precedenti, verbali, requisiti.
-Si trova nella cartella `contesto/`.
+**Context.** The body of reference documents gathered for the drafting: higher-ranking rules, connected acts, previous versions, minutes, requirements.
+It is held in the `CONTEXT/` folder.
 
-**Manifest delle fonti.** L'indice ordinato del contesto, con una scheda per ciascuna fonte raccolta.
+**Source manifest.** The ordered index of the context, with one record for each source gathered.
 
-**Registro.** File versionato dedicato a una sola categoria di informazioni sul progetto.
-Il metodo ne prevede quattro, tutti obbligatori.
+**Register.** A versioned file dedicated to a single category of information about the project.
+The method provides for four of them, all mandatory.
 
-**Documento di avvio.** Il file `AVVIO_PROGETTO.md`, nella cartella principale del progetto, che contiene il mandato: è la prima lettura di ogni sessione.
+**Project brief.** The file `PROJECT_BRIEF.md`, in the project's main folder, which contains the mandate: it is the first thing read in every session.
 
-**Ciclo di produzione.** La sequenza che si ripete nella Fase 2 e che porta dalla prima bozza a una versione candidata.
+**Production cycle.** The sequence that repeats in Phase 2 and that leads from the first draft to a candidate version.
 
-**Release candidate (RC).** La versione del documento che viene sottoposta a revisione esterna.
-Le RC sono numerate in ordine:
+**Release candidate (RC).** The version of the document that is submitted for external review.
+RCs are numbered in order:
 RC 1, RC 2, …, RC *n*.
-Una bozza interna al ciclo di produzione non è una RC.
+A draft internal to the production cycle is not an RC.
 
-**Revisione in cieco.** Revisione fatta da persone che non sanno che il documento è stato prodotto con l'aiuto di un modello.
-Il cieco è temporaneo e viene sciolto a revisione conclusa.
+**Blind review.** A review carried out by people who do not know that the document was produced with the help of a model.
+The blind is temporary and is dissolved once the review is concluded.
 
-**Rilascio.** L'insieme delle operazioni che trasformano una RC approvata in un documento dell'ente: esportazione, verifica di accessibilità, adozione formale.
+**Release.** The set of operations that turn an approved RC into a document of the administration: export, accessibility check, formal adoption.
 
 ---
 
-## 4. Architettura del metodo
+## 4. Method architecture
 
-![Le sei fasi del metodo e i passaggi che le collegano, descritti nella tabella e nel testo che seguono.](immagini/architettura-del-metodo.png)
+![The six phases of the method and the transitions that connect them, described in the table and the text that follow.](images/method-architecture.png)
 
-Il metodo si divide in sei fasi, una delle quali (la Fase 2) si ripete a cicli.
-| Fase | Oggetto | Dove |
+The method is divided into six phases, one of which (Phase 2) repeats in cycles.
+| Phase | Subject | Where |
 | :---- | :---- | :---- |
-| **0** | Allestimento tecnico: installazione dello strumento e del modello | [Ambiente](#6-fase-0--ambiente) |
-| **1** | Avvio del progetto: repository, registri, ruoli, verifiche, mandato, fonti, manifest | [Avvio del progetto e contesto](#7-fase-1--avvio-del-progetto-e-contesto) |
-| **2** | Ciclo di produzione, fino alla RC pronta per la revisione | [Ciclo di produzione](#8-fase-2--ciclo-di-produzione) |
-| **3** | Revisione esterna in cieco; l'esito riporta alla Fase 2 o alla Fase 4 | [Revisione esterna](#9-fase-3--revisione-esterna) |
-| **4** | Rilascio: esportazione, accessibilità, adozione formale | [Rilascio](#10-fase-4--rilascio) |
-| **5** | Revisioni di medio periodo | [Revisioni di medio periodo](#11-fase-5--revisioni-di-medio-periodo) |
+| **0** | Technical set-up: installing the tool and the model | [Environment](#6-phase-0--environment) |
+| **1** | Project start-up: repository, registers, roles, checks, mandate, sources, manifest | [Project start-up and context](#7-phase-1--project-start-up-and-context) |
+| **2** | Production cycle, up to the RC ready for review | [Production cycle](#8-phase-2--production-cycle) |
+| **3** | Blind external review; the outcome leads back to Phase 2 or on to Phase 4 | [External review](#9-phase-3--external-review) |
+| **4** | Release: export, accessibility, formal adoption | [Release](#10-phase-4--release) |
+| **5** | Medium-term reviews | [Medium-term reviews](#11-phase-5--medium-term-reviews) |
 
-Due proprietà dell'architettura meritano attenzione.
-- **Numerazione delle versioni candidate.** Le versioni sottoposte a revisione esterna sono le release candidate.
-  Ogni revisione che chieda modifiche riporta il documento nel ciclo di produzione e dà origine a una nuova RC.
-  Quando la revisione non chiede altre modifiche, la RC in esame diventa la versione di rilascio.
-- **Distribuzione della supervisione.** Dentro il ciclo di produzione la persona supervisiona **ogni** passo: gli unici passi automatici sono l'aggiornamento dei registri e il commit Git, che avvengono al termine di ogni scambio fra persona e modello e restano leggibili per intero.
-  Non è un dettaglio di rappresentazione: è la condizione perché la responsabilità del risultato resti di una persona.
-
----
-
-## 5. Principi
-
-**Portabilità.** Il metodo non dipende da un fornitore, da un modello, da uno strumento o da un ambiente specifici.
-Questa indipendenza è una scelta di progetto:
-**la documentazione prevista dal metodo rende portabili i progetti.** Tutto ciò che serve per riprendere un progetto (regole, stato, storia delle decisioni) sta in file di testo leggibili con qualunque strumento, e non nella memoria di sessione di un modello.
-Cambiare modello, strumento o persona costa quindi quanto il tempo di lettura di quei file.
-
-**Versionamento e distinzione degli interventi.** Ogni modifica DEVE essere registrata in Git.
-Dalla registrazione DEVE inoltre risultare che cosa ha fatto la persona e che cosa ha fatto il modello: senza questa distinzione la cronologia dice che cosa è cambiato ma non chi lo ha voluto, e viene meno il presupposto della responsabilità editoriale.
-La distinzione si ottiene con la convenzione sui messaggi di commit e con il fatto che il testo annotato dalla persona viene registrato in Git prima di essere riscritto.
-
-**Memoria esplicita.** Ciò che il progetto sa di sé stesso NON DEVE stare soltanto nella memoria delle persone o nella sessione di un modello.
-Decisioni, stato e motivazioni DEVONO essere scritti in forma stabile.
-I registri si avviano insieme al progetto.
-
-**Supervisione umana.** Il modello propone e rivede; le decisioni e la validazione finale restano della persona.
-L'automazione non sostituisce il giudizio.
-
-**Formati aperti nel processo.** Il lavoro DEVE svolgersi in formati di testo aperti, che Git gestisce bene.
-L'esportazione nei formati finali avviene solo dopo l'approvazione.
-
-**Verificabilità da parte di terzi.** Ogni affermazione contenuta nel documento prodotto DEVE poter essere ricondotta alla fonte che la sostiene, anche da chi non ha partecipato al lavoro.
-Il principio tiene insieme tre adempimenti che sembrano distinti (il manifest delle fonti, la dichiarazione dei dati mancanti e la conservazione in Git delle versioni annotate) e che servono tutti a rendere ispezionabile il passaggio dai documenti consultati al testo prodotto.
-Un documento che non consente questa verifica può anche essere corretto, ma non è validabile.
+Two properties of the architecture deserve attention.
+- **Numbering of the candidate versions.** The versions submitted for external review are the release candidates.
+  Any review that asks for changes takes the document back into the production cycle and gives rise to a new RC.
+  When the review asks for no further changes, the RC under examination becomes the release version.
+- **Distribution of supervision.** Inside the production cycle the person supervises **every** step: the only automatic steps are the updating of the registers and the Git commit, which happen at the end of each exchange between person and model and remain readable in full.
+  This is not a detail of representation: it is the condition on which responsibility for the result remains a person's.
 
 ---
-## 6. Fase 0 – Ambiente
 
-La Fase 0 è **tecnica** ed è preliminare alla redazione: prepara l'ambiente su cui si lavorerà.
-Può essere svolta da un tecnico dell'ente, una volta sola, e il responsabile del progetto può cominciare direttamente dalla Fase 1 su un ambiente già pronto.
+## 5. Principles
 
-### 6.1 Requisiti e installazione
+**Portability.** The method does not depend on any particular supplier, model, tool or environment.
+That independence is a design choice:
+**the documentation the method prescribes is what makes projects portable.** Everything needed to pick a project up again (rules, state, history of decisions) sits in text files readable with any tool, and not in a model's session memory.
+Changing model, tool or person therefore costs no more than the time it takes to read those files.
 
-- **Licenza per un modello utilizzabile da riga di comando**, già in dotazione.
-  Nelle applicazioni di riferimento sono stati usati due strumenti di fornitori diversi, entrambi coperti da licenze dell'ente già attive per altre finalità.
-- **Lo strumento a riga di comando** che dà accesso al modello, installato e autenticato con le credenziali dell'ente.
-- **Git** installato, e conoscenze di base sull'uso da terminale (commit, ramo, confronto tra versioni, cronologia).
-- **Un ambiente di lavoro** con sistema operativo Linux, Windows (con WSL) o macOS.
-  Non serve infrastruttura dedicata né acquisto di hardware.
-- **Python 3**, se si adotta lo script di cattura delle interazioni fornito con questo repository.
-  È presente su qualunque distribuzione Linux e non richiede altro.
-- **Un editor di testo**, usato per scrivere il mandato e per annotare le bozze fuori dalla sessione del modello.
+**Versioning and the distinction between contributions.** Every change MUST be recorded in Git.
+The record MUST also show what the person did and what the model did: without that distinction the history says what changed but not who wanted it, and the premise of editorial responsibility falls away.
+The distinction is obtained through the convention on commit messages, and through the fact that text annotated by the person is recorded in Git before being rewritten.
 
-### 6.2 Collocazione dell'ambiente e presenza di più utenti
+**Explicit memory.** What the project knows about itself MUST NOT reside solely in people's memory or in a model's session.
+Decisions, state and reasons MUST be written down in stable form.
+The registers are started together with the project.
 
-Il metodo non impone dove collocare l'ambiente, ma la scelta fra postazione personale e server condiviso incide sulla continuità del lavoro e sulla sua governabilità: le ragioni e le cautele sono nell'[Appendice tecnica 3](#appendice-tecnica-3--macchina-locale-e-server-condiviso). Quando sullo stesso corpus lavorano più redattori, l'organizzazione dei rami e la soluzione dei conflitti sono descritte nell'[Appendice tecnica 4](#appendice-tecnica-4--collaborazione-fra-più-redattori), che riguarda una possibilità ancora da sperimentare.
+**Human supervision.** The model proposes and revises; the decisions and the final validation remain the person's.
+Automation does not replace judgement.
+
+**Open formats in the process.** The work MUST be carried out in open text formats, which Git handles well.
+Export to the final formats happens only after approval.
+
+**Verifiability by third parties.** Every statement contained in the document produced MUST be traceable back to the source that supports it, including by someone who took no part in the work.
+The principle holds together three requirements that look separate (the source manifest, the declaration of missing data, and the preservation in Git of the annotated versions) and that all serve to make inspectable the passage from the documents consulted to the text produced.
+A document that does not allow this verification may well be correct, but it is not validatable.
 
 ---
-## 7. Fase 1 – Avvio del progetto e contesto
+## 6. Phase 0 – Environment
 
-La Fase 1 apre il progetto e ne costruisce le fondamenta: il repository, i registri, i ruoli, le verifiche preliminari, il mandato e il contesto.
-È la fase che determina la qualità del risultato, perché il testo prodotto dal modello non può essere migliore del contesto che lo sostiene, ed è la prima in cui il modello lavora in modo sostanziale, con verifica umana dopo ogni operazione.
+Phase 0 is **technical** and precedes the drafting: it prepares the environment the work will be done in.
+It can be carried out by a technician of the administration, once only, and the project lead can start straight from Phase 1 on an environment that is already prepared.
 
-I passi che seguono sono in ordine di esecuzione.
-Chi subentra a lavorazione avviata li ritrova tutti nel repository e non deve ripeterli.
+### 6.1 Requirements and installation
 
-### 7.1 Considerazioni preliminari e la cartella di progetto
+- **A licence for a model usable from the command line**, already held by the administration.
+  In the reference applications two tools from different suppliers were used, both covered by licences the administration already had active for other purposes.
+- **The command-line tool** that gives access to the model, installed and authenticated with the administration's credentials.
+- **Git** installed, plus a basic working knowledge of it from the terminal (commit, branch, comparison between versions, history).
+- **A working environment** running Linux, Windows (with WSL) or macOS.
+  No dedicated infrastructure and no hardware purchase are needed.
+- **Python 3**, if the interaction-capture script supplied with this repository is adopted.
+  It is present on any Linux distribution and requires nothing else.
+- **A text editor**, used to write the mandate and to annotate the drafts outside the model's session.
 
-Prima di iniziare la fase di scrittura vanno considerati tre aspetti: i ruoli, che cosa è in carico al modello e come è fatto lo spazio in cui il lavoro verrà conservato.
+### 6.2 Where the environment lives, and multiple users
 
-#### 7.1.1 Ruoli del processo di redazione
+The method does not prescribe where the environment should sit, but the choice between a personal workstation and a shared server bears on the continuity of the work and on how governable it is: the reasons and the precautions are in [Technical appendix 3](#technical-appendix-3--local-machine-and-shared-server). When several drafters work on the same corpus, the organisation of branches and the resolution of conflicts are described in [Technical appendix 4](#technical-appendix-4--collaboration-between-several-drafters).
 
-I ruoli DEVONO essere assegnati anche in strutture piccole: il metodo distribuisce l'esecuzione fra persona e modello, mentre la responsabilità non si distribuisce.
-I titolari sono poi indicati nel documento di avvio.
+### 6.3 Language of the kit
 
-| Ruolo | Responsabilità | Note |
+English sits at the root of the repository; every other language sits in `lang/<code>/`, in a folder that mirrors the root structure with the same file names.
+
+**One language MUST be chosen before the work begins, and `lang/` MUST be removed.**
+Keeping two copies of binding documents means they drift apart over time: one gets updated and the other does not, nobody notices, and whoever happens to read the wrong one works to superseded rules.
+Removing the folder turns a permanent risk into a decision taken once, and it is what makes the file names of the method the same in every language.
+
+The choice is carried out when the repository is initialised ([Initialising the repository](#721-initialising-the-repository)), with a single command per language, and its result is checked at the opening of every session by the rule in `REGISTERS/INSTRUCTIONS.md`: if `lang/` is still there, the model reports it and asks before proceeding.
+The procedure for each language, what must stay identical across languages, and how to add a new one are in [Technical appendix 5](#technical-appendix-5--languages-of-the-kit).
+
+---
+## 7. Phase 1 – Project start-up and context
+
+Phase 1 opens the project and builds its foundations: the repository, the registers, the roles, the preliminary checks, the mandate and the context.
+It is the phase that determines the quality of the result, because the text the model produces cannot be better than the context that supports it, and it is the first in which the model does substantial work, with human verification after every operation.
+
+The steps that follow are in order of execution.
+Anyone joining once the work is under way finds them all in the repository and does not have to repeat them.
+
+### 7.1 Preliminary considerations and the project folder
+
+Before the writing phase begins, three matters must be considered: the roles, what is entrusted to the model, and how the space in which the work will be preserved is arranged.
+
+#### 7.1.1 Roles in the drafting process
+
+Roles MUST be assigned even in small structures: the method distributes execution between person and model, whereas responsibility is not distributed.
+Who holds each role is then stated in the project brief.
+
+| Role | Responsibility | Notes |
 | :---- | :---- | :---- |
-| **Referente del progetto** | Definizione di obiettivi e vincoli, tenuta di stato e istruzioni, decisione nel merito | Il modello non decide in alcun ruolo. |
-| **Redattore** | Costruzione del contesto, conduzione del ciclo, tenuta del worklog | Può coincidere con il referente. |
-| **Validatore** | Verifica del risultato, senza aver partecipato alla redazione | Ruolo separato per definizione. |
-| **Responsabile del rilascio** | Autorizzazione all'esportazione e alla messa agli atti | Il passaggio da bozza a documento dell'ente è un atto umano esplicito. |
+| **Project lead** | Defining objectives and constraints, keeping state and instructions, deciding on the merits | The model decides in no role. |
+| **Drafter** | Building the context, running the cycle, keeping the worklog | May be the same person as the project lead. |
+| **Validator** | Checking the result, without having taken part in the drafting | A separate role by definition. |
+| **Release authority** | Authorising export and entry into the official record | The passage from draft to document of the administration is an explicit human act. |
 
-La separazione fra chi scrive e chi convalida è l'unica separazione di ruoli obbligatoria: referente e redattore possono essere la stessa persona, redattore e validatore devono essere persone diverse.
-Assegnare i quattro ruoli è la condizione perché il processo di scrittura e revisione sia governato.
+The separation between whoever writes and whoever validates is the only mandatory separation of roles: project lead and drafter may be the same person, drafter and validator must be different people.
+Assigning the four roles is the condition on which the writing and review process is governed.
 
-#### 7.1.2 Verifiche preliminari
+#### 7.1.2 Preliminary checks
 
-Le tre verifiche seguenti DEVONO essere concluse **prima** di dare qualunque documento in lettura al modello.
+The three checks below MUST be completed **before** any document is given to the model to read.
 
-1. **Politiche interne** applicabili ai documenti che si possono conferire a un modello.
-2. **Condizioni contrattuali del servizio** usato, con particolare attenzione all'eventuale riutilizzo dei contenuti trasmessi per addestrare i modelli.
-   La condizione cambia da fornitore a fornitore, da piano a piano e nel tempo.
-   La verifica DEVE essere fatta sul contratto o sul pannello di amministrazione e DEVE essere annotata, con la data, in `registri/PROJECT.md`.
-3. **Conformità alla normativa vigente.** Questo documento descrive un metodo di lavoro e non dà consulenza giuridica.
-   L'uso di sistemi di intelligenza artificiale da parte di un'amministrazione pubblica è regolato da norme in evoluzione, europee e nazionali, che riguardano fra l'altro la trasparenza sull'uso di questi sistemi, la tracciabilità del loro impiego e il fatto che la responsabilità dei provvedimenti resti di una persona fisica.
-   L'ente che adotta il metodo DEVE verificare, con le proprie strutture competenti (ufficio legale, responsabile della protezione dei dati, responsabile della transizione al digitale) che l'uso sia conforme alle norme applicabili al momento dell'adozione.
-   Questa verifica NON DEVE essere sostituita dall'adesione al metodo.
+1. **Internal policies** applicable to the documents that may be handed to a model.
+2. **The contractual terms of the service** used, with particular attention to any reuse of the transmitted content to train the models.
+   That term varies from supplier to supplier, from plan to plan, and over time.
+   The check MUST be made against the contract or the administration panel, and MUST be noted, with its date, in `REGISTERS/PROJECT.md`.
+3. **Compliance with the legislation in force.** This document describes a working method and does not give legal advice.
+   The use of artificial intelligence systems by a public administration is governed by evolving rules, European and national, concerning among other things transparency about the use of these systems, traceability of their employment, and the fact that responsibility for administrative measures remains with a natural person.
+   The administration adopting the method MUST verify, through its own competent structures (legal office, data protection officer, digital transition officer), that the use complies with the rules applicable at the time of adoption.
+   That verification MUST NOT be replaced by adherence to the method.
 
-#### 7.1.3 La cartella di progetto
+#### 7.1.3 The project folder
 
-La cartella di progetto è l'area di lavoro in cui vive tutto il progetto: le fonti, le bozze, i registri e la cronologia delle modifiche.
-I tre paragrafi che seguono ne descrivono le parti.
+The project folder is the working area in which the whole project lives: the sources, the drafts, the registers and the history of the changes.
+The three paragraphs that follow describe its parts.
 
-##### 7.1.3.1 Le cartelle
+##### 7.1.3.1 The folders
 
-La cartella di progetto è composta da:
+The project folder is made up of:
 
-- **`contesto/`** – i documenti di riferimento.
-  Il contenuto delle singole fonti NON DEVE essere modificato: se si altera una fonte, tutto il lavoro che vi si appoggia non è più verificabile.
-  La composizione della raccolta PUÒ invece cambiare (si aggiunge, si toglie, si riclassifica, si rifà il manifest) quando c'è una ragione, che DEVE essere annotata.
-  Come organizzare le sottocartelle è deciso dal singolo progetto: un corpus di norme e una raccolta di verbali si ordinano in modo diverso.
-- **`rilascio/`** – le versioni finali esportate.
-  Dopo l'esportazione la cartella NON DEVE essere modificata a mano: contiene ciò che è stato consegnato, non ciò che è in lavorazione.
-- **`registri/`** – i quattro registri del progetto, descritti qui sotto.
+- **`CONTEXT/`** – the reference documents.
+  The content of the individual sources MUST NOT be altered: if a source is altered, all the work that rests on it is no longer verifiable.
+  The composition of the collection MAY instead change (adding, removing, reclassifying, redoing the manifest) when there is a reason, which MUST be noted.
+  How to organise the subfolders is decided by each project: a corpus of legislation and a collection of minutes are ordered differently.
+- **`RELEASE/`** – the final exported versions.
+  After the export the folder MUST NOT be modified by hand: it holds what was delivered, not what is being worked on.
+- **`REGISTERS/`** – the project's four registers, described below.
 
-Le bozze in lavorazione stanno nella cartella principale del progetto, o in una cartella dedicata, in un formato di testo aperto.
+The drafts being worked on sit in the project's main folder, or in a dedicated folder, in an open text format.
 
-##### 7.1.3.2 I registri
+##### 7.1.3.2 The registers
 
-I registri sono documenti leggibili dalla persona e dal modello, che tengono traccia del lavoro svolto nel tempo.
-Il metodo usa quattro file, ciascuno con una sola funzione.
-**I quattro registri DEVONO essere tutti presenti e tutti attivi fin dall'inizio del progetto.**
+The registers are documents readable by both person and model, which keep track of the work done over time.
+The method uses four files, each with a single function.
+**All four registers MUST be present and all MUST be active from the start of the project.**
 
-| Registro | Domanda cui risponde |
+| Register | Question it answers |
 | :---- | :---- |
-| `INSTRUCTIONS.md` | Come si lavora in questo progetto? |
-| `PROJECT.md` | A che punto è il progetto, che cosa è deciso, che cosa è aperto? |
-| `WORKLOG.md` | Che cosa è stato fatto, con quali verifiche e con quale esito? |
-| `CONVERSATION.md` | Che cosa è stato chiesto al modello e che cosa ha risposto? |
+| `INSTRUCTIONS.md` | How is work done in this project? |
+| `PROJECT.md` | Where has the project got to, what is decided, what is open? |
+| `WORKLOG.md` | What has been done, with which checks and with what outcome? |
+| `CONVERSATION.md` | What was asked of the model, and what did it answer? |
 
-`INSTRUCTIONS.md` contiene le regole che il modello deve seguire mentre lavora, comprese quelle che governano la scrittura degli altri registri.
-Il funzionamento dell'archivio delle interazioni è descritto nell'[Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni).
+`INSTRUCTIONS.md` holds the rules the model must follow while it works, including those that govern the writing of the other registers.
+How the interaction archive works is described in [Technical appendix 2](#technical-appendix-2--the-interaction-archive).
 
-Tenere quattro registri distinti invece di uno solo non è una scelta di ordine, ma di funzionamento; il confronto fra i due casi lo mostra.
-- **Un registro unico.** Un solo file raccoglie regole, stato, attività e interazioni.
-  L'effetto immediato è che il file cresce senza controllo e nel giro di poche settimane non si riesce più a leggerlo per intero.
-  L'effetto successivo è una selezione implicita: chi scrive privilegia ciò che si annota in fretta (le attività) e trascura ciò che richiede riflessione, cioè lo stato e le regole.
-  La parte che smette per prima di essere aggiornata è quindi quella che serve di più a chi subentra.
-  L'effetto finale è che il quadro corrente non è più ricostruibile: resta disperso fra annotazioni di epoche diverse e in contraddizione fra loro.
-- **Quattro registri.** Ogni file ha un ritmo di scrittura suo, adatto alla propria funzione: una regola si corregge sul posto e resta breve; un'attività si aggiunge in fondo e non si riscrive più; lo stato si riscrive quando il quadro cambia e resta sempre attuale; un'interazione si registra da sola e non compete con le altre per l'attenzione di chi scrive.
-  La separazione evita inoltre l'errore più frequente, cioè trasformare il registro di stato in un secondo diario delle attività.
+Keeping four separate registers instead of a single one is not a matter of tidiness but of functioning; comparing the two cases shows it.
+- **A single register.** One file collects rules, state, activities and interactions.
+  The immediate effect is that the file grows without control and within a few weeks can no longer be read through.
+  The next effect is an implicit selection: whoever writes favours what is quick to note down (the activities) and neglects what calls for reflection, namely the state and the rules.
+  The part that stops being updated first is therefore the part most needed by whoever takes over.
+  The final effect is that the current picture can no longer be reconstructed: it stays scattered among notes from different periods that contradict one another.
+- **Four registers.** Each file has its own writing rhythm, suited to its own function: a rule is corrected in place and stays short; an activity is added at the end and never rewritten; the state is rewritten when the picture changes and so stays current; an interaction records itself and does not compete with the others for the writer's attention.
+  The separation also avoids the most frequent error, that of turning the state register into a second diary of activities.
 
-Nel repository di riferimento `INSTRUCTIONS.md` è fornito già compilato ed è il manuale operativo del metodo, scritto in forma di istruzioni che il modello può eseguire.
-Gli altri tre registri sono forniti **vuoti**: appartengono al progetto adottante.
-Un registro precompilato con contenuti estranei, di regola, non viene ripulito.
+In the reference repository `INSTRUCTIONS.md` is supplied ready-written and is the operating manual of the method, cast in the form of instructions the model can carry out.
+The other three registers are supplied **empty**: they belong to the adopting project.
+A register pre-filled with extraneous content, as a rule, never gets cleaned out.
 
-##### 7.1.3.3 Gestione di Git
+##### 7.1.3.3 Managing Git
 
-Git è affidato al modello, che decide quando fare il commit e lo esegue, seguendo le istruzioni contenute in `INSTRUCTIONS.md`: a ogni giro del ciclo di produzione e a ogni passaggio di fase.
-La delega riguarda l'esecuzione, non la responsabilità: la cronologia resta leggibile e ispezionabile per intero.
+Git is entrusted to the model, which decides when to commit and does so, following the instructions held in `INSTRUCTIONS.md`: at every turn of the production cycle and at every change of phase.
+The delegation concerns execution, not responsibility: the history remains readable and inspectable in full.
 
-I messaggi di commit seguono la convenzione `tipo(ambito): descrizione` e corrispondono alla voce di worklog dello stesso momento.
-Dal messaggio risulta inoltre in modo chiaro **che cosa ha fatto la persona e che cosa il modello**: i commit che recepiscono annotazioni umane lo dichiarano.
+Commit messages follow the convention `type(scope): description` and correspond to the worklog entry of the same moment.
+The message must also make clear **what the person did and what the model did**: commits that carry out human annotations say so.
 
 ```
-docs(regolamento): recepisci le annotazioni umane sulla sezione 3
-docs(regolamento): colma la lacuna sulle proroghe rilevata dall'analisi
+docs(regulation): carry out the human annotations on section 3
+docs(regulation): fill the gap on extensions found by the analysis
 ```
 
-Il messaggio dice **che cosa** è cambiato; il **perché** (la decisione presa, la verifica fatta, la questione rimasta aperta) DEVE essere scritto nel worklog.
+The message says **what** changed; the **why** (the decision taken, the check made, the question left open) MUST be written in the worklog.
 
-### 7.2 Prime fasi operative
+### 7.2 First operational steps
 
-Stabilite le premesse, il lavoro comincia: si allestisce il repository, si scrive il mandato, si raccolgono le fonti e si apre la prima sessione con il modello.
+With the premises settled, the work begins: the repository is set up, the mandate is written, the sources are gathered and the first session with the model is opened.
 
-#### 7.2.1 Inizializzazione del repository
+#### 7.2.1 Initialising the repository
 
-Il repository che contiene questo documento si copia con `git clone`.
-La copia porta con sé la cronologia di sviluppo del metodo, che non è la cronologia del progetto adottante e non DEVE diventarlo: una cronologia estranea rende inutilizzabile ogni ricostruzione successiva e confonde l'attribuzione delle modifiche.
-**La cartella `.git` DEVE quindi essere eliminata dopo la copia e ricreata da zero**, così che il primo commit del progetto coincida con il suo inizio effettivo.
-Chi non ha pratica di Git trova nell'[Appendice 1](#appendice-1--che-cosè-git) una spiegazione non tecnica di che cos'è, come funziona e perché il metodo lo adotta.
+The repository containing this document is copied with `git clone`.
+The copy carries with it the development history of the method, which is not the history of the adopting project and MUST NOT become it: an extraneous history makes any later reconstruction unusable and confuses the attribution of changes.
+**The `.git` folder MUST therefore be deleted after the copy and recreated from scratch**, so that the project's first commit coincides with its actual beginning.
+Anyone unfamiliar with Git will find in [Appendix 1](#appendix-1--what-git-is) a non-technical explanation of what it is, how it works and why the method adopts it.
 
 ```shell
-git clone [indirizzo-del-repository] nome-progetto
-cd nome-progetto
+git clone [repository-address] project-name
+cd project-name
 
-rm -rf .git        # elimina la cronologia del metodo
-git init           # ricrea il repository, vuoto, per il progetto adottante
+rm -rf .git        # delete the history of the method
+git init           # recreate the repository, empty, for the adopting project
 
-git config user.name "Nome Cognome"
-git config user.email "nome.cognome@ente.it"
-git add . && git commit -m "chore: allestimento iniziale del progetto"
+rm -rf lang        # work in English: remove the other languages
+
+git config user.name "Name Surname"
+git config user.email "name.surname@example.org"
+git add . && git commit -m "chore: initial project set-up"
 ```
 
-Le due righe di configurazione stabiliscono il nome e l'indirizzo che compariranno in ogni versione registrata: vanno indicati quelli reali, perché sono l'unico elemento che attribuisce le modifiche a una persona.
+The third command carries out the choice of language prescribed in [Language of the kit](#63-language-of-the-kit), in its English form.
+To work in another language, replace it with the two commands that promote that language to the root and remove the folder: for Italian, `cp -r lang/it/. .` followed by `rm -rf lang`.
+Either way the operation is a single, indivisible act: it cannot be half done, which is why it is written this way (Technical appendix 5).
 
-#### 7.2.2 Redazione del documento di avvio
+The two configuration lines establish the name and address that will appear in every recorded version: the real ones must be given, because they are the only element that attributes changes to a person.
 
-Il mandato del progetto sta in `AVVIO_PROGETTO.md`, nella cartella principale.
-È il documento che la persona subentrante e il modello DEVONO leggere per primo a ogni sessione, e ha tre funzioni:
+#### 7.2.2 Drafting the project brief
 
-1. **Mandato.** Scopo del progetto, perimetro, principi di redazione richiesti, documenti da non usare come base, contenuto già deciso.
-   È la parte che il modello non può dedurre e che nessun'altra fonte contiene.
-2. **Assegnazione dei ruoli.** Chi decide, chi scrive, chi convalida, chi autorizza il rilascio.
-3. **Rinvio vincolante alle regole operative.** Il documento di avvio impone di leggere per intero `registri/INSTRUCTIONS.md` e di attenersi a quel file per tutta la lavorazione.
-   Le procedure (ordine di lettura, apertura e chiusura del turno, aggiornamento dei registri, interpretazione delle annotazioni, uso di Git) stanno lì e non qui: il mandato cambia da progetto a progetto, le procedure no.
+The project mandate sits in `PROJECT_BRIEF.md`, in the main folder.
+It is the document that both the incoming person and the model MUST read first in every session, and it has three functions:
 
-**Il documento di avvio DEVE essere compilato prima di raccogliere le fonti.** Si scrive in un editor, fuori dalla sessione del modello: raccogliere documentazione senza un mandato definito produce raccolte ampie e poco pertinenti.
-Nelle applicazioni di riferimento il mandato è stato scritto una volta sola, riletto a ogni sessione e poi modificato solo per correzioni.
-Un mandato che esista soltanto nella cronologia di una sessione non è disponibile alla sessione successiva: è la ragione per cui il metodo ne prescrive la forma di file versionato.
+1. **Mandate.** Purpose of the project, perimeter, drafting principles required, documents not to be used as a basis, content already decided.
+   It is the part the model cannot infer and that no other source contains.
+2. **Assignment of roles.** Who decides, who writes, who validates, who authorises the release.
+3. **Binding referral to the operating rules.** The project brief requires that `REGISTERS/INSTRUCTIONS.md` be read in full and adhered to throughout the work.
+   The procedures (order of reading, opening and closing a turn, updating the registers, interpreting annotations, use of Git) live there and not here: the mandate changes from project to project, the procedures do not.
 
-#### 7.2.3 Acquisizione delle fonti
+**The project brief MUST be filled in before the sources are gathered.** It is written in an editor, outside the model's session: gathering documentation without a defined mandate produces collections that are broad and of little relevance.
+In the reference applications the mandate was written once, reread at every session and then modified only for corrections.
+A mandate that exists only in the history of one session is not available to the next session: that is why the method prescribes it in the form of a versioned file.
 
-- In `contesto/` DEVE essere raccolta tutta la documentazione pertinente: normativa sovraordinata, atti collegati, versioni precedenti, verbali, requisiti.
-- I formati DOVREBBERO essere di testo, o facilmente convertibili in testo, così che il modello possa leggerne il contenuto per intero.
-- Gli obiettivi del documento da produrre, i vincoli e le decisioni già prese non appartengono al contesto: stanno nel documento di avvio.
-- I nomi dei file DOVREBBERO essere parlanti e datati (`2024_regolamento-X_v2.md`), in modo da rendere riconoscibile l'origine di ogni riferimento.
-- I documenti presenti solo per inquadramento (dottrina, articoli, presentazioni) DEVONO essere elencati come tali nel documento di avvio: altrimenti il modello attribuisce loro il peso delle fonti principali.
+#### 7.2.3 Acquiring the sources
 
-I file si copiano nella cartella e basta: non occorre rinominarli né convertirli.
-Questa operazione si svolge fuori dalla sessione del modello.
+- All the relevant documentation MUST be gathered in `CONTEXT/`: higher-ranking rules, connected acts, previous versions, minutes, requirements.
+- The formats SHOULD be text, or easily convertible into text, so that the model can read their content in full.
+- The objectives of the document to be produced, the constraints and the decisions already taken do not belong to the context: they sit in the project brief.
+- File names SHOULD be meaningful and dated (`2024_regulation-X_v2.md`), so as to make the origin of every reference recognisable.
+- Documents present only for background (scholarly writing, articles, presentations) MUST be listed as such in the project brief: otherwise the model gives them the weight of primary sources.
 
-#### 7.2.4 Elaborazione del file di avvio
+The files are simply copied into the folder: there is no need to rename or convert them.
+This operation takes place outside the model's session.
 
-Con il repository allestito, il mandato compilato e le fonti raccolte, si apre la prima sessione di lavoro.
-Dal terminale:
+#### 7.2.4 Processing the project brief
+
+With the repository set up, the mandate filled in and the sources gathered, the first working session is opened.
+From the terminal:
 
 ```shell
-cd nome-progetto
-claude          # oppure il comando dello strumento in uso
+cd project-name
+claude          # or the command of the tool in use
 ```
 
-La prima richiesta è una riga sola:
+The first request is a single line:
 
 ```
-leggi AVVIO_PROGETTO.md
+read PROJECT_BRIEF.md
 ```
 
-Non serve altro, ed è deliberato.
-Quel documento contiene il mandato e rinvia alle regole operative, le quali prescrivono per intero la sequenza di apertura: verifica dello stato del repository, lettura del registro delle istruzioni e di quello di stato, lettura della parte finale del registro delle attività, ricognizione delle fonti presenti in `contesto/`.
-Il modello percorre la catena da sé.
-Elencargli i file da aprire è superfluo e, se l'elenco è incompleto, dannoso, perché sostituisce una sequenza prescritta con una improvvisata.
+Nothing else is needed, and that is deliberate.
+That document holds the mandate and refers on to the operating rules, which prescribe the opening sequence in full: checking the state of the repository, reading the register of instructions and the register of state, reading the final part of the register of activities, and surveying the sources present in `CONTEXT/`.
+The model follows the chain by itself.
+Listing the files for it to open is superfluous and, if the list is incomplete, harmful, because it replaces a prescribed sequence with an improvised one.
 
-Il modello apre i documenti nell'ordine prescritto e chiude con la **dichiarazione di lettura**: poche righe che riassumono lo stato del progetto, l'ultima attività registrata, la consistenza del contesto e le questioni aperte.
-Alla prima sessione i registri sono vuoti, e la dichiarazione riferisce sullo stato di partenza.
-
-```
-Esempio di risposta alla prima sessione
-
-Ho letto AVVIO_PROGETTO.md e, come prescritto, registri/INSTRUCTIONS.md,
-registri/PROJECT.md e registri/WORKLOG.md; ho poi verificato contesto/.
-
-Il mandato riguarda il regolamento sull'uso della posta elettronica
-istituzionale, con esclusione della posta certificata. I registri di stato e
-delle attività sono vuoti: è la prima sessione del progetto. In contesto/
-sono presenti nove file, non ancora censiti in un manifest.
-
-Segnalo che due sezioni del mandato non risultano compilate: il perimetro
-concettuale e i titolari dei ruoli. Posso procedere ugualmente, ma il
-perimetro condiziona la selezione delle fonti.
-```
-
-La dichiarazione serve a verificare, prima di affidare il primo incarico, che il modello abbia letto ciò che doveva e abbia inquadrato il progetto.
-Se non corrisponde a quanto ci si aspetta, il difetto è quasi sempre nei documenti (mandato incompleto, registro di stato non aggiornato) e va corretto prima di procedere.
-Le richieste rivolte al modello si formulano con parole proprie, e il modello risponde in linguaggio naturale.
-
-#### 7.2.5 Redazione del manifest
-
-Il manifest è l'indice ordinato delle fonti raccolte, ed è il primo incarico affidato al modello dopo la lettura del mandato.
-Ogni scheda DEVE riportare: sigla breve, titolo, provenienza o indirizzo, data di acquisizione, nome della copia locale, e la ragione per cui la fonte è stata raccolta, con l'indicazione della parte del lavoro a cui serve.
-
-Il manifest ha tre funzioni, che insieme spiegano perché si usa al posto di un semplice elenco di file:
-
-1. permette di verificare una citazione senza rifare la ricerca;
-2. distingue le fonti effettivamente lette da quelle soltanto reperite;
-3. conserva gli identificativi stabili (estremi dell'atto, identificativi ufficiali delle fonti europee) che durano più a lungo degli indirizzi web.
-
-Il manifest DEVE essere aggiornato mentre si raccolgono le fonti, una per una.
-Rimandarlo a fine lavorazione, nella pratica, lo rende incompleto.
-
-Il modello può essere utilizzato come supporto alla redazione del Manifest.
-Infatti esso è in grado di estrarre dai documenti acquisiti gli elementi identificativi, proporre la classificazione e formulare domande mirate sugli elementi che non è in grado di determinare autonomamente: la ragione dell'acquisizione, la parte del lavoro cui la fonte è funzionale, la vigenza di un atto.
-Se dispone di accesso alla rete, può inoltre reperire autonomamente gli identificativi stabili e le versioni consolidate degli atti citati.
-La verifica dei record prodotti resta in capo alla persona.
-Usare il modello in questa fase riduce i tempi e aggiunge un controllo in più rispetto a quello manuale.
+The model opens the documents in the prescribed order and closes with the **declaration of reading**: a few lines summarising the state of the project, the last activity recorded, the extent of the context and the open questions.
+At the first session the registers are empty, and the declaration reports on the starting state.
 
 ```
-Leggi tutti i file in contesto/ e produci il manifest delle fonti:
-per ciascuna, denominazione, tipo, data e rilevanza per il mandato.
-Segnala le fonti che ritieni mancanti rispetto allo scopo del progetto.
+Example of an answer at the first session
+
+I have read PROJECT_BRIEF.md and, as prescribed, REGISTERS/INSTRUCTIONS.md,
+REGISTERS/PROJECT.md and REGISTERS/WORKLOG.md; I then checked CONTEXT/.
+
+The mandate concerns the regulation on the use of institutional e-mail,
+excluding certified electronic mail. The registers of state and of activities
+are empty: this is the project's first session. CONTEXT/ holds nine files, not
+yet recorded in a manifest.
+
+I note that two sections of the mandate are not filled in: the conceptual
+perimeter and the holders of the roles. I can proceed all the same, but the
+perimeter conditions the selection of the sources.
 ```
 
-L'ultima frase è la parte che rende utile il passaggio: le lacune del contesto emergono qui, prima che la bozza vi si appoggi.
-Il modello elenca il contenuto della cartella, apre i file uno a uno e scrive un file nuovo, chiedendo (secondo la configurazione dello strumento) l'autorizzazione a farlo.
+The declaration serves to verify, before the first task is entrusted, that the model has read what it had to read and has grasped the project.
+If it does not match expectations, the defect is almost always in the documents (an incomplete mandate, a state register not kept up to date) and must be corrected before going on.
+Requests to the model are phrased in one's own words, and the model answers in natural language.
+
+#### 7.2.5 Drafting the manifest
+
+The manifest is the ordered index of the sources gathered, and it is the first task entrusted to the model after the reading of the mandate.
+Each record MUST carry: short code, title, provenance or address, date of acquisition, name of the local copy, and the reason the source was gathered, with an indication of the part of the work it serves.
+
+The manifest has three functions, which together explain why it is used instead of a plain list of files:
+
+1. it allows a citation to be verified without redoing the search;
+2. it distinguishes the sources actually read from those merely retrieved;
+3. it preserves the stable identifiers (the particulars of an act, the official identifiers of European sources) that outlast web addresses.
+
+The manifest MUST be updated as the sources are gathered, one by one.
+Putting it off to the end of the work makes it, in practice, incomplete.
+
+The model can be used as support in drafting the manifest.
+It is able to extract the identifying elements from the documents acquired, to propose the classification, and to put targeted questions about the elements it cannot determine on its own: the reason for the acquisition, the part of the work the source serves, whether an act is still in force.
+If it has access to the network, it can also retrieve the stable identifiers and the consolidated versions of the acts cited by itself.
+Checking the records produced remains the person's responsibility.
+Using the model at this stage shortens the work and adds a check beyond the manual one.
 
 ```
-Esempio di risposta
-
-Ho letto nove file e scritto contesto/MANIFEST.md.
-
-Rilevanza alta: d.lgs. 82/2005 (artt. 12 e 40), Linee guida AgID sulla
-formazione dei documenti informatici, regolamento interno del 2019 sugli
-strumenti informatici.
-Rilevanza media: due circolari attuative del 2021 e del 2023.
-Inquadramento: quattro documenti di dottrina, che non ho considerato fonti.
-
-Ritengo mancanti tre elementi: il provvedimento del Garante richiamato
-dalla circolare del 2023, che nel corpus non è presente; l'atto istitutivo
-delle caselle di ruolo, citato dal regolamento interno; l'informativa
-attualmente consegnata ai dipendenti, senza la quale non è verificabile la
-coerenza fra il regolamento e quanto già dichiarato.
+Read all the files in CONTEXT/ and produce the source manifest:
+for each one, name, type, date and relevance to the mandate.
+Point out the sources you consider missing with respect to the purpose of the project.
 ```
 
-I tre rilievi finali sono inferenze: il modello non ha trovato quei documenti, ha dedotto che dovrebbero esistere perché altri atti li richiamano.
-Vanno verificati, e se i documenti esistono vanno aggiunti a `contesto/` e censiti nel manifest.
+The last sentence is what makes the step worthwhile: gaps in the context surface here, before the draft comes to rest on it.
+The model lists the content of the folder, opens the files one by one and writes a new file, asking (depending on the tool's configuration) for authorisation to do so.
 
-##### 7.2.5.1 Fonti non acquisibili direttamente
+```
+Example of an answer
 
-Può capitare che una banca dati istituzionale restituisca una pagina di controllo automatico invece del documento richiesto.
-In quel caso si ricorre a un'altra fonte ufficiale dello stesso atto, se ne conservano gli identificativi stabili e la circostanza DEVE essere annotata nel manifest: chi riesamina il lavoro deve poter distinguere una fonte consultata direttamente da una fonte sostituita.
-Prendere un atto da una fonte non qualificata senza annotare la sostituzione compromette la verificabilità di tutto l'apparato documentale.
+I have read nine files and written CONTEXT/MANIFEST.md.
 
-#### 7.2.6 Verifica del mandato e uscita dalla fase
+High relevance: legislative decree 82/2005 (articles 12 and 40), the AgID
+guidelines on the creation of electronic documents, the 2019 internal
+regulation on IT tools.
+Medium relevance: two implementing circulars, of 2021 and 2023.
+Background: four scholarly documents, which I have not treated as sources.
 
-Prima di passare alla Fase 2 DEVE essere verificato che il documento di avvio sia compilato in tutte le sezioni che lo richiedono, che le fonti raccolte siano coerenti con il perimetro dichiarato lì e che il manifest sia completo e verificato dalla persona.
-Le fonti raccolte ma estranee al perimetro DEVONO essere rimosse, oppure dichiarate come materiale di solo inquadramento, da non usare come base.
+I consider three items to be missing: the measure of the data protection
+authority referred to by the 2023 circular, which is not in the corpus; the act
+establishing the role-based mailboxes, cited by the internal regulation; and
+the privacy notice currently given to employees, without which the consistency
+between the regulation and what has already been declared cannot be verified.
+```
+
+The three closing remarks are inferences: the model did not find those documents, it deduced that they ought to exist because other acts refer to them.
+They must be verified, and if the documents exist they must be added to `CONTEXT/` and recorded in the manifest.
+
+##### 7.2.5.1 Sources that cannot be acquired directly
+
+It can happen that an institutional database returns an automated-check page instead of the document requested.
+In that case another official source of the same act is used, its stable identifiers are preserved, and the circumstance MUST be noted in the manifest: whoever re-examines the work must be able to tell a source consulted directly from a source substituted.
+Taking an act from an unqualified source without noting the substitution compromises the verifiability of the whole documentary apparatus.
+
+#### 7.2.6 Checking the mandate and leaving the phase
+
+Before moving on to Phase 2 it MUST be verified that the project brief is filled in in every section that requires it, that the sources gathered are consistent with the perimeter declared there, and that the manifest is complete and has been checked by the person.
+Sources that have been gathered but fall outside the perimeter MUST be removed, or else declared as background material only, not to be used as a basis.
 
 ---
 
-## 8. Fase 2 – Ciclo di produzione
+## 8. Phase 2 – Production cycle
 
-La Fase 2 è il cuore del metodo.
-Ogni giro produce o migliora il documento, ne sottopone l'esito alla persona e comporta l'aggiornamento dei registri e del repository.
-Il ciclo finisce quando la versione è pronta per la revisione esterna: quella versione è una release candidate.
+Phase 2 is the heart of the method.
+Every turn produces or improves the document, submits the outcome to the person, and entails updating the registers and the repository.
+The cycle ends when the version is ready for external review: that version is a release candidate.
 
-La fase si compone di quattro azioni.
-La prima apre la lavorazione e si esegue una volta sola; le altre tre si ripetono a ogni giro, e la seconda raccoglie due operazioni che si alternano senza un ordine fisso.
+The phase is made up of four actions.
+The first opens the work and is performed once only; the other three repeat at every turn, and the second gathers two operations that alternate without a fixed order.
 
-| Azione | Oggetto | Chi agisce |
+| Action | Subject | Who acts |
 | :---- | :---- | :---- |
-| **2.1** | Prima bozza | persona → modello |
-| **2.2** | Modifica della documentazione: **2.2.a** prompting, **2.2.b** aggiornamento del contesto | persona decide, modello esegue |
-| **2.3** | Revisione umana | persona |
-| **2.4** | Analisi di completezza | modello, verificata dalla persona |
+| **2.1** | First draft | person → model |
+| **2.2** | Amending the documentation: **2.2.a** prompting, **2.2.b** updating the context | the person decides, the model executes |
+| **2.3** | Human review | person |
+| **2.4** | Completeness analysis | model, verified by the person |
 
-A ciascuna azione seguono l'aggiornamento dei registri e il commit.
+Each action is followed by the updating of the registers and the commit.
 
-### 8.1 Azione 2.1 - Prima bozza
+### 8.1 Action 2.1 – First draft
 
-Il primo incarico di redazione indica che cosa produrre e dove, e rinvia ai documenti già presenti.
-Non occorre incollare testo nella richiesta: mandato, fonti e manifest sono interpretati in automatico.
-
-```
-Redigi la prima bozza del documento previsto dal mandato, in un file
-bozza-regolamento.md nella radice del progetto. Attieniti alle fonti in
-contesto/. Dove una decisione di merito non risulta dal mandato o dalle
-fonti, non colmarla: segnalala in coda al documento come questione aperta.
-```
-
-Il modello rilegge il mandato e le fonti pertinenti, scrive il file e riferisce che cosa ha prodotto.
-Il testo compare nella cartella del progetto e si apre con un normale editor: la sessione serve a produrlo, non a conservarlo.
+The first drafting task states what to produce and where, and refers to the documents already present.
+There is no need to paste text into the request: mandate, sources and manifest are read automatically.
 
 ```
-Esempio di risposta
-
-Ho scritto bozza-regolamento.md: sette articoli, circa 1.400 parole.
-
-Ho seguito la struttura del regolamento interno del 2019 per continuità
-con gli altri atti dell'ente, e ho ripreso le definizioni dal d.lgs.
-82/2005 anziché formularne di nuove.
-
-Ho lasciato aperte tre questioni, elencate in coda al documento:
-1. termine di conservazione dopo la cessazione del rapporto: le fonti
-   indicano due anni per un caso e cinque per un altro, e la differenza
-   non è spiegata;
-2. regime del personale in comando, non disciplinato da alcuna fonte;
-3. individuazione dell'ufficio competente alla disattivazione delle
-   caselle: la scelta è organizzativa e non mi risulta decisa.
-
-Sul punto 1 posso proporre una lettura, se utile: la differenza sembra
-dipendere dalla natura della casella, nominativa o di ruolo. È
-un'inferenza da verificare.
+Draft the first version of the document the mandate provides for, in a file
+draft-regulation.md in the project root. Keep to the sources in CONTEXT/.
+Where a decision on the merits does not follow from the mandate or from the
+sources, do not fill it in: flag it at the end of the document as an open
+question.
 ```
 
-Il modello può formulare **domande di chiarimento** sui requisiti ambigui, e rispondere a quelle domande è parte del lavoro: le risposte valgono come decisioni.
-Le domande DEVONO essere sollecitate nel documento di avvio, ma NON DEVONO essere considerate un controllo: non è garantito che il modello le formuli.
-Il controllo sono la revisione umana e la revisione esterna.
-
-### 8.2 Azione 2.2 – Modifica della documentazione
-
-Prodotta la prima bozza, il lavoro procede ciclicamente modificando il documento oppure il materiale su cui si fonda.
-Le due operazioni che seguono non stanno in un ordine fisso e si alternano secondo ciò che il giro ha messo in luce.
-
-**2.2.a Prompting e raffinamento.** Si chiede al modello di estendere, correggere o riformulare parti del testo, oppure di argomentare una lettura che ha proposto.
-Si interagisce come con un collaboratore esperto della materia: si spiega l'obiettivo, si pongono domande, si contestano le conclusioni quando non convincono.
-Il modello ragiona e compie inferenze (collega disposizioni di testi diversi, deduce conseguenze non scritte, rileva contraddizioni) e di ciascuna inferenza si PUÒ chiedere conto.
+The model rereads the mandate and the relevant sources, writes the file and reports what it has produced.
+The text appears in the project folder and opens with an ordinary editor: the session serves to produce it, not to keep it.
 
 ```
-Sviluppa la lettura del punto 1: da quali passaggi la ricavi, e che cosa
-implicherebbe per le caselle di ruolo condivise fra più uffici?
+Example of an answer
+
+I have written draft-regulation.md: seven articles, about 1,400 words.
+
+I followed the structure of the 2019 internal regulation for continuity with
+the administration's other acts, and I took the definitions from legislative
+decree 82/2005 rather than framing new ones.
+
+I have left three questions open, listed at the end of the document:
+1. retention period after the end of the employment relationship: the sources
+   give two years in one case and five in another, and the difference is not
+   explained;
+2. the regime for seconded staff, which no source governs;
+3. identification of the office responsible for deactivating the mailboxes:
+   the choice is organisational and does not appear to have been decided.
+
+On point 1 I can offer a reading, if useful: the difference seems to depend on
+the nature of the mailbox, personal or role-based. It is an inference to be
+verified.
 ```
 
-Le risposte sono argomentazioni plausibili, non accertamenti: vanno verificate sulle fonti, e la verifica spetta alla persona.
+The model may put **clarification questions** about ambiguous requirements, and answering them is part of the work: the answers count as decisions.
+The questions MUST be invited in the project brief, but they MUST NOT be treated as a control: there is no guarantee that the model will put them.
+The controls are the human review and the external review.
 
-**2.2.b Aggiornamento del contesto.** Ogni giro può mettere in luce un'insufficienza del contesto: una fonte non raccolta, una classificazione da rivedere, una scheda del manifest da rifare.
-Il contenuto delle fonti NON DEVE essere modificato; la composizione della raccolta PUÒ cambiare quando c'è una ragione, che DEVE essere annotata nel manifest e nel worklog.
+### 8.2 Action 2.2 – Amending the documentation
 
-```
-Aggiungi a contesto/ il provvedimento del Garante che avevi segnalato come
-mancante, censiscilo nel manifest indicando che è stato acquisito in corso
-di lavorazione, e dimmi quali passaggi della bozza ne risultano toccati.
-```
+Once the first draft has been produced, the work proceeds cyclically by amending either the document or the material it rests on.
+The two operations below follow no fixed order and alternate according to what the turn has brought to light.
 
-### 8.3 Azione 2.3 – Revisione umana
-
-La persona esamina la proposta, la corregge e decide.
-Il modo in cui la correzione viene eseguita è uno degli elementi che caratterizzano il metodo.
-
-**Il testo prodotto dal modello NON DEVE essere corretto direttamente.** La persona interviene inserendo nel testo **annotazioni**, che il modello legge, interpreta ed esegue al giro successivo, producendo una nuova versione pulita.
-L'annotazione descrive l'intervento voluto («questo passaggio va esteso», «manca il riferimento all'articolo 12», «questa distinzione non è corretta, vale solo per il personale a tempo determinato») e viene interpretata dal modello al passaggio successivo.
-
-Le annotazioni DEVONO distinguersi dal testo in modo inequivocabile, senza confondersi con la punteggiatura ordinaria.
-Il metodo usa a questo scopo, come delimitatori, tre parentesi angolari aperte e tre chiuse (<<<...>>>), poste subito dopo il passaggio a cui si riferiscono:
+**2.2.a Prompting and refinement.** The model is asked to extend, correct or reformulate parts of the text, or to argue a reading it has proposed.
+One interacts with it as with a colleague expert in the subject: the objective is explained, questions are put, conclusions are contested when they do not convince.
+The model reasons and draws inferences (it connects provisions from different texts, deduces unwritten consequences, detects contradictions), and an account MAY be demanded of each inference.
 
 ```
-La casella è disattivata decorsi due anni dalla cessazione del
-rapporto.<<<specificare che il termine decorre dalla data di cessazione
-formale e non dall'ultimo accesso; aggiungere il rinvio all'art. 12>>>
+Develop the reading of point 1: which passages do you draw it from, and what
+would it imply for role-based mailboxes shared between several offices?
 ```
 
-La scelta di tre caratteri ripetuti non è casuale: non ricorre nel linguaggio amministrativo, sopravvive alla conversione fra formati testuali, si cerca con un'espressione semplice e non entra in conflitto con la sintassi di Markdown.
+The answers are plausible arguments, not findings of fact: they must be checked against the sources, and the checking falls to the person.
 
-Le annotazioni si scrivono **nel file stesso**, aperto con un editor di testo fuori dalla sessione del modello.
-**Lo stato annotato DEVE essere registrato in Git prima che il modello lo riscriva:** è questo commit a conservare l'intervento umano, e senza di esso il recepimento cancellerebbe le annotazioni senza lasciarne traccia.
-
-L'operazione è **automatica**: quando il modello prende in carico un file annotato, la prima cosa che fa è registrarne lo stato così com'è, con un messaggio che dichiara la presenza di annotazioni umane da recepire; solo dopo esegue le annotazioni.
-La prescrizione è in `registri/INSTRUCTIONS.md`.
-
-L'interazione con il modello serve ora a far elaborare le annotazioni, produce la versione pulita e rimuove dal testo solo quelle recepite.
-Le annotazioni non eseguite, non comprese o in conflitto con altre istruzioni non vengono rimosse, e la circostanza è segnalata perché la persona possa decidere.
+**2.2.b Updating the context.** Every turn may expose an insufficiency in the context: a source not gathered, a classification to be revisited, a manifest record to be redone.
+The content of the sources MUST NOT be altered; the composition of the collection MAY change when there is a reason, which MUST be noted in the manifest and in the worklog.
 
 ```
-Prendi in carico bozza-regolamento.md: esegui le annotazioni, produci la
-versione pulita del documento e rimuovi solo le annotazioni effettivamente
-recepite. Elenca quelle che non hai eseguito, con la ragione.
+Add to CONTEXT/ the measure of the data protection authority you flagged as
+missing, record it in the manifest noting that it was acquired during the work,
+and tell me which passages of the draft are affected by it.
+```
+
+### 8.3 Action 2.3 – Human review
+
+The person examines the proposal, corrects it and decides.
+The way the correction is carried out is one of the elements that characterise the method.
+
+**The text produced by the model MUST NOT be corrected directly.** The person intervenes by inserting **annotations** into the text, which the model reads, interprets and carries out at the following turn, producing a new clean version.
+The annotation describes the intervention wanted ("this passage needs extending", "the reference to article 12 is missing", "this distinction is not correct, it holds only for fixed-term staff") and is interpreted by the model at the next passage.
+
+Annotations MUST be unmistakably distinct from the text, without being confused with ordinary punctuation.
+For this purpose the method uses, as delimiters, three opening and three closing angle brackets (<<<...>>>), placed immediately after the passage they refer to:
+
+```
+The mailbox is deactivated two years after the end of the employment
+relationship.<<<specify that the period runs from the date of formal
+termination and not from the last access; add the reference to art. 12>>>
+```
+
+The choice of three repeated characters is not casual: the sequence does not occur in administrative language, it survives conversion between text formats, it can be searched for with a simple expression, and it does not clash with Markdown syntax.
+
+Annotations are written **in the file itself**, opened with a text editor outside the model's session.
+**The annotated state MUST be recorded in Git before the model rewrites it:** it is that commit which preserves the human intervention, and without it, carrying them out would erase the annotations leaving no trace of them.
+
+The operation is **automatic**: when the model takes charge of an annotated file, the first thing it does is record its state as it stands, with a message declaring the presence of human annotations still to be carried out; only then does it carry them out.
+The prescription is in `REGISTERS/INSTRUCTIONS.md`.
+
+The interaction with the model now serves to have the annotations processed; it produces the clean version and removes from the text only those that have been carried out.
+Annotations not carried out, not understood, or in conflict with other instructions are not removed, and the circumstance is reported so that the person can decide.
+
+```
+Take charge of draft-regulation.md: carry out the annotations, produce the clean
+version of the document and remove only the annotations actually carried out.
+List the ones you did not carry out, with the reason.
 ```
 
 ```
-Esempio di risposta
+Example of an answer
 
-Ho registrato lo stato annotato del file prima di toccarlo
-(docs(regolamento): acquisisci le annotazioni umane sulla sezione 3).
+I recorded the annotated state of the file before touching it
+(docs(regulation): record the human annotations on section 3).
 
-Ho poi trovato undici annotazioni e ne ho eseguite dieci; ho riscritto
-bozza-regolamento.md nella versione pulita, rimuovendo solo le dieci
-recepite.
+I then found eleven annotations and carried out ten of them; I rewrote
+draft-regulation.md in the clean version, removing only the ten carried out.
 
-Non ho eseguito l'annotazione all'art. 4 («estendere la disciplina alle
-caselle di ruolo»): confligge con l'annotazione all'art. 2, che chiede di
-escluderle dal perimetro. Le due indicazioni non sono componibili e la
-scelta è di merito. L'annotazione resta nel file, in attesa di decisione.
+I did not carry out the annotation at art. 4 ("extend the rules to role-based
+mailboxes"): it conflicts with the annotation at art. 2, which asks for them to
+be excluded from the perimeter. The two instructions cannot be combined and the
+choice is one of merit. The annotation stays in the file, awaiting a decision.
 ```
 
-La versione annotata e la versione pulita sono due commit successivi dello stesso file, e si recuperano entrambe dalla cronologia.
+The annotated version and the clean version are two successive commits of the same file, and both can be retrieved from the history.
 
-La procedura operativa completa (riconoscimento, ordine di esecuzione, rimozione, trattamento delle annotazioni non eseguite o non conformi, archiviazione preventiva) è in `registri/INSTRUCTIONS.md`, il file che il modello legge a ogni sessione.
+The complete operating procedure (recognition, order of execution, removal, treatment of annotations not carried out or not compliant, prior archiving) is in `REGISTERS/INSTRUCTIONS.md`, the file the model reads at every session.
 
-I vantaggi di questo metodo sono tre.
+There are three advantages to this way of working.
 
-- **Dimostrabilità.** L'annotazione è un artefatto, non un ricordo: a distanza di mesi si può ricostruire quale osservazione umana abbia prodotto quale modifica, e la revisione umana si può mostrare a terzi invece di limitarsi a dichiararla.
-  In un processo in cui la responsabilità resta della persona, poter esibire il proprio intervento è una tutela.
-- **Coerenza di stile.** Il testo è scritto tutto dal modello, che ne mantiene uniformi registro, terminologia e costruzione delle frasi.
-  Correggere a mano produce invece stacchi di stile percepibili (un paragrafo riscritto si riconosce dal resto) che in un documento normativo diventano incertezza interpretativa.
-  Delegando l'esecuzione al modello, la correzione entra nel testo con la voce del testo.
-- **Separazione fra decisione ed esecuzione.** L'annotazione obbliga a dire che cosa non va e perché, mentre la correzione diretta permette di intervenire senza spiegarne la ragione.
-  La ragione, una volta scritta, resta a disposizione di chi riesaminerà il lavoro.
+- **Demonstrability.** The annotation is an artefact, not a recollection: months later it is possible to reconstruct which human observation produced which change, and the human review can be shown to third parties instead of merely being asserted.
+  In a process where responsibility remains the person's, being able to exhibit one's own intervention is a protection.
+- **Consistency of style.** The text is written entirely by the model, which keeps register, terminology and sentence construction uniform.
+  Correcting by hand instead produces perceptible breaks in style (a rewritten paragraph stands out from the rest) which in a regulatory document become interpretative uncertainty.
+  By delegating execution to the model, the correction enters the text in the text's own voice.
+- **Separation between decision and execution.** The annotation compels one to say what is wrong and why, whereas direct correction allows an intervention without any reason being given.
+  The reason, once written, remains available to whoever re-examines the work.
 
-### 8.4 Azione 2.4 – Analisi di completezza
+### 8.4 Action 2.4 – Completeness analysis
 
-Oltre alla redazione, al modello DEVE essere chiesta la **verifica di completezza e coerenza** rispetto a tutto il contesto: riferimenti mancanti, documentazione di supporto necessaria, incoerenze rispetto alle norme vigenti.
+Beyond the drafting, the model MUST be asked for a **check of completeness and consistency** against the whole context: missing references, supporting documentation needed, inconsistencies with the rules in force.
 
-L'analisi si fa **dopo** la revisione umana.
-La collocazione è sostanziale: il modello analizza il testo nella formulazione voluta dalla persona e non una bozza destinata a essere corretta, e quindi le lacune che rileva sono lacune del documento reale.
-
-```
-Verifica il documento rispetto a tutte le fonti in contesto/: riferimenti
-mancanti, incongruenze con la normativa citata, passaggi privi di
-fondamento nelle fonti. Elenca i rilievi senza modificare il testo.
-```
-
-La richiesta di non modificare il testo è deliberata: serve l'elenco, per deciderne l'accoglimento, non una nuova versione già corretta.
+The analysis is done **after** the human review.
+Its placement is substantive: the model analyses the text in the wording the person wanted, and not a draft destined to be corrected, so the gaps it finds are gaps in the real document.
 
 ```
-Esempio di risposta
-
-Quattro rilievi.
-- L'art. 3 richiama «la normativa vigente in materia di protezione dei
-  dati» senza indicarla; le altre disposizioni del testo citano gli
-  estremi.
-- L'art. 5 prevede il consenso del dipendente all'accesso alla casella; il
-  provvedimento del Garante richiamato in contesto/ fonda invece
-  quell'accesso su un presupposto diverso. La formulazione va riesaminata.
-- L'art. 6 dispone la conservazione dei log per dodici mesi: il termine non
-  ha fondamento in alcuna fonte del corpus. Se deriva da una decisione
-  interna, va richiamata.
-- Il documento non disciplina l'ipotesi di decesso del titolare, che le
-  linee guida trattano espressamente.
+Check the document against all the sources in CONTEXT/: missing references,
+inconsistencies with the legislation cited, passages with no foundation in the
+sources. List the findings without modifying the text.
 ```
 
-Ogni proposta va verificata prima di essere recepita.
+The request not to modify the text is deliberate: what is needed is the list, so that its acceptance can be decided, not a new already-corrected version.
 
-#### 8.4.1 Dati non disponibili
+```
+Example of an answer
 
-Quando si scrive documentazione amministrativa, una parte delle informazioni necessarie non è disponibile: un allegato mai redatto, una relazione periodica mai prodotta, la risposta di un fornitore non arrivata, un atto di cui non si riesce ad accertare la vigenza.
+Four findings.
+- Art. 3 refers to "the legislation in force on data protection" without
+  identifying it; the other provisions of the text give the particulars.
+- Art. 5 provides for the employee's consent to access the mailbox; the measure
+  of the data protection authority held in CONTEXT/ instead bases that access
+  on a different premise. The wording needs re-examining.
+- Art. 6 provides for logs to be kept for twelve months: the period has no
+  foundation in any source in the corpus. If it derives from an internal
+  decision, that decision should be cited.
+- The document does not govern the case of the holder's death, which the
+  guidelines expressly address.
+```
 
-**La mancanza DEVE essere dichiarata; il contenuto plausibile NON DEVE essere prodotto.** In concreto:
+Every proposal must be verified before being carried out.
 
-- il documento DEVE contenere un segnaposto esplicito che indichi che cosa manca e perché («relazione non redatta», «in attesa di riscontro») e NON DEVE contenere un testo verosimile al suo posto;
-- l'elenco degli elementi da verificare DEVE accompagnare la bozza come sezione a sé, con una voce per ogni lacuna;
-- il modello DEVE essere istruito espressamente in tal senso, perché la sua inclinazione naturale è completare e non segnalare, e il rispetto della regola DEVE essere controllato.
+#### 8.4.1 Unavailable data
 
-Da questa regola dipende l'affidabilità del metodo presso gli uffici che devono convalidare.
-Un documento che dichiara le proprie lacune è utilizzabile: il lettore ne conosce i limiti.
-Un documento in cui le lacune sono state riempite con testo verosimile non è validabile, perché il validatore non ha modo di capire quali affermazioni verificare, e la lacuna riemerge dopo l'adozione dell'atto.
+When administrative documentation is written, some of the information needed is not available: an annex never drawn up, a periodic report never produced, a supplier's answer that never arrived, an act whose validity cannot be established.
 
-### 8.5 Aggiornamento dei registri e commit
+**The absence MUST be declared; plausible content MUST NOT be produced.** In practice:
 
-Al termine di ogni azione, e comunque di ogni scambio fra persona e modello, si eseguono due operazioni automatiche: l'aggiornamento dei registri e il commit.
+- the document MUST contain an explicit placeholder stating what is missing and why ("report not drawn up", "awaiting reply") and MUST NOT contain a plausible-looking text in its place;
+- the list of items to be verified MUST accompany the draft as a section of its own, with one entry for each gap;
+- the model MUST be expressly instructed to this effect, because its natural inclination is to complete rather than to flag, and compliance with the rule MUST be checked.
 
-- `WORKLOG.md` riceve una voce se l'attività è significativa: un avanzamento del documento, una decisione presa, una verifica che cambia quanto ci si può fidare del risultato.
-  NON DEVE essere scritta una voce per ogni singolo comando.
-- `PROJECT.md` si aggiorna solo quando cambia il quadro complessivo.
-- `CONVERSATION.md` è popolato dall'ambiente, o dal modello nei casi in cui l'ambiente non lo faccia ([Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
-- Il commit chiude l'iterazione, con la distinzione fra intervento umano e intervento del modello prescritta dalla convenzione sui messaggi di commit.
+The reliability of the method with the offices that have to validate depends on this rule.
+A document that declares its own gaps is usable: the reader knows its limits.
+A document in which the gaps have been filled with plausible-looking text is not validatable, because the validator has no way of knowing which statements to check, and the gap resurfaces after the act has been adopted.
 
-### 8.6 Condizione di uscita dal ciclo
+### 8.5 Updating the registers and committing
 
-Il ciclo finisce quando la versione supera una lettura integrale senza far emergere modifiche sostanziali, e quando i rilievi dell'analisi di completezza non riguardano più il merito.
-Quella versione prende il numero **RC 1** e passa alla Fase 3.
+At the end of every action, and in any case of every exchange between person and model, two automatic operations are performed: updating the registers and committing.
+
+- `WORKLOG.md` receives an entry if the activity is significant: a step forward in the document, a decision taken, a check that changes how far the result can be trusted.
+  An entry MUST NOT be written for every single command.
+- `PROJECT.md` is updated only when the overall picture changes.
+- `CONVERSATION.md` is populated by the environment, or by the model in those cases where the environment does not do it ([Technical appendix 2](#technical-appendix-2--the-interaction-archive)).
+- The commit closes the iteration, with the distinction between human intervention and model intervention prescribed by the convention on commit messages.
+
+### 8.6 Exit condition for the cycle
+
+The cycle ends when the version survives a complete reading without any substantive change emerging, and when the findings of the completeness analysis no longer bear on the merits.
+That version takes the number **RC 1** and passes to Phase 3.
 
 ---
 
-## 9. Fase 3 – Revisione esterna
+## 9. Phase 3 – External review
 
-Il documento DEVE essere sottoposto a persone che non hanno partecipato alla redazione.
-La separazione fra chi scrive e chi convalida è l'unica separazione di ruoli obbligatoria del metodo.
-**In questa fase il modello non viene impiegato:** la revisione è svolta interamente da persone, ed è il momento in cui il lavoro esce dal circuito che lo ha prodotto.
+The document MUST be submitted to people who took no part in the drafting.
+The separation between whoever writes and whoever validates is the method's only mandatory separation of roles.
+**The model is not employed in this phase:** the review is carried out entirely by people, and it is the moment when the work leaves the circuit that produced it.
 
-**Cieco temporaneo.** La revisione DOVREBBE essere fatta da persone che non sanno che la bozza è stata prodotta con l'aiuto di un modello, per ottenere un giudizio non influenzato da questa informazione.
-Il cieco è temporaneo e DEVE essere sciolto a revisione conclusa, dicendo ai revisori come il testo è stato prodotto.
+**Temporary blind.** The review SHOULD be carried out by people who do not know that the draft was produced with the help of a model, so as to obtain a judgement uninfluenced by that information.
+The blind is temporary and MUST be dissolved once the review is concluded, by telling the reviewers how the text was produced.
 
-Servono entrambi i passaggi.
-Il cieco rende il giudizio non condizionato; lo scioglimento lo rende utilizzabile: una validazione di cui chi l'ha espressa non conosce l'oggetto non è citabile, e un revisore che scopra per caso di aver convalidato un testo prodotto con un modello non ripete l'esercizio.
+Both steps are needed.
+The blind makes the judgement unconditioned; the unblinding makes it usable: a validation whose author does not know what it was about cannot be cited, and a reviewer who finds out by chance that they have validated a text produced with a model will not repeat the exercise.
 
-**Registrazione degli esiti.** DEVONO essere registrate le osservazioni ricevute, quante ne sono state accolte e quante respinte, e per quale ragione.
-La registrazione serve alla qualità e alla trasparenza e sta nel worklog.
+**Recording the outcomes.** The observations received MUST be recorded, together with how many were accepted and how many rejected, and for what reason.
+The record serves quality and transparency, and it belongs in the worklog.
 
-**Esiti.** Se vengono chieste modifiche, il documento rientra in Fase 2: il ciclo produce una nuova versione, numerata RC 2, e così via fino a RC *n*.
-Se non ne vengono chieste, la RC in esame passa alla Fase 4.
-
----
-
-## 10. Fase 4 – Rilascio
-
-Il passaggio da bozza a documento dell'ente è un atto umano esplicito, di competenza del responsabile del rilascio.
-La fase comprende tre operazioni.
-- **Esportazione.** La versione approvata è convertita dal formato di lavoro ai formati standard dell'ente e depositata in `rilascio/`.
-  Dopo il deposito la cartella NON DEVE essere modificata a mano.
-- **Verifica di accessibilità.** DEVONO essere verificate la coerenza dei titoli, la selezionabilità del testo, la corretta marcatura delle tabelle e l'idoneità del formato finale alla conservazione e all'accesso.
-  Usare il modello per un controllo strutturale preliminare alla conversione, con revisione umana dell'esito, si è rivelato efficace: è un compito con requisiti espliciti e verificabili, e in queste condizioni il modello rende bene.
-  La verifica resta comunque soggetta a revisione e NON DEVE essere delegata per intero.
-- **Adozione formale.** Il documento entra nell'ordinamento dell'ente con l'atto competente (decreto, delibera, determinazione) ed è pubblicato dove previsto.
-  Adozione e pubblicazione sono passaggi distinti e non vanno confusi.
+**Outcomes.** If changes are requested, the document returns to Phase 2: the cycle produces a new version, numbered RC 2, and so on up to RC *n*.
+If none are requested, the RC under examination passes to Phase 4.
 
 ---
 
-## 11. Fase 5 – Revisioni di medio periodo
+## 10. Phase 4 – Release
 
-Un regolamento o un manuale non si esaurisce con la pubblicazione: cambiano le norme, i sistemi e l'organizzazione.
-Molti documenti sono peraltro soggetti a revisione periodica obbligatoria.
-A distanza di tempo dalla pubblicazione, chi riprende un documento incontra sempre le stesse quattro situazioni, e a ciascuna risponde un elemento del metodo:
+The passage from draft to document of the administration is an explicit human act, falling to the release authority.
+The phase comprises three operations.
+- **Export.** The approved version is converted from the working format to the administration's standard formats and deposited in `RELEASE/`.
+  After deposit the folder MUST NOT be modified by hand.
+- **Accessibility check.** The consistency of the headings, the selectability of the text, the correct mark-up of the tables and the suitability of the final format for preservation and access MUST all be verified.
+  Using the model for a structural check prior to conversion, with human review of the outcome, has proved effective: it is a task with explicit and verifiable requirements, and in those conditions the model performs well.
+  The check nonetheless remains subject to review and MUST NOT be delegated in its entirety.
+- **Formal adoption.** The document enters the administration's body of rules by the appropriate act (decree, resolution, determination) and is published where required.
+  Adoption and publication are distinct steps and should not be conflated.
 
-| Situazione | Elemento che vi risponde |
+---
+
+## 11. Phase 5 – Medium-term reviews
+
+A regulation or a manual is not exhausted by its publication: rules, systems and organisations change.
+Many documents are moreover subject to mandatory periodic review.
+Some time after publication, whoever picks a document up again always meets the same four situations, and to each of them an element of the method responds:
+
+| Situation | Element that responds to it |
 | :---- | :---- |
-| Il lavoro riprende dopo mesi e non si ricorda più perché una frase sia stata scritta così | `WORKLOG.md`, che ne conserva la ragione e la verifica |
-| Subentra personale nuovo, che altrimenti dovrebbe intervistare chi ha lavorato prima | `AVVIO_PROGETTO.md` e `PROJECT.md`, che rendono l'intervista superflua |
-| È cambiata la versione del modello, o si usa un altro strumento, e l'impostazione della sessione precedente non è recuperabile | Il documento di avvio, che contiene il mandato in forma indipendente dallo strumento |
-| Viene chiesto che cosa esattamente sia stato chiesto al modello e che cosa esso abbia risposto | `CONVERSATION.md`, che è l'unico registro a rispondere |
+| Work resumes after months and no one remembers why a sentence was written the way it was | `WORKLOG.md`, which preserves the reason and the check |
+| New staff arrive, who would otherwise have to interview whoever worked on it before | `PROJECT_BRIEF.md` and `PROJECT.md`, which make the interview superfluous |
+| The version of the model has changed, or another tool is in use, and the set-up of the previous session cannot be recovered | The project brief, which holds the mandate in a form independent of the tool |
+| Someone asks what exactly was asked of the model and what it answered | `CONVERSATION.md`, the only register that answers |
 
-La Fase 5 è quindi il momento in cui l'investimento fatto nelle Fasi 0 e 1 rende.
-Le ragioni sono tre.
-- **Si riapre invece di ricostruire.** Riprendere costa quanto il tempo di lettura dei registri, non quanto la ricostruzione di un contesto perduto.
-- **Le fonti sono già classificate.** La verifica tipica di una revisione (quali riferimenti normativi siano cambiati nel frattempo) è un'operazione meccanica se esiste un manifest con identificativi stabili, e un'operazione lunga se non esiste.
-- **Accountability.** Un documento di cui si possano ricostruire, a distanza di tempo, chi ha deciso che cosa, su quali fonti e con quali verifiche, è un documento difendibile.
-  Questa proprietà non si costruisce a posteriori: si accumula durante la lavorazione, grazie al fatto che la registrazione è automatica.
+Phase 5 is therefore the moment when the investment made in Phases 0 and 1 pays off.
+There are three reasons.
+- **One reopens instead of reconstructing.** Picking the work up again costs the time it takes to read the registers, not the reconstruction of a lost context.
+- **The sources are already classified.** The check typical of a review (which legal references have changed in the meantime) is a mechanical operation if a manifest with stable identifiers exists, and a long one if it does not.
+- **Accountability.** A document for which it is possible to reconstruct, long afterwards, who decided what, on which sources and with which checks, is a defensible document.
+  This property cannot be built after the fact: it accumulates during the work, thanks to the recording being automatic.
 
-**Conduzione.** Una revisione di medio periodo rientra dalla Fase 1: si riapre il contesto, si verificano le variazioni delle fonti, si aggiorna il manifest.
-Se emergono modifiche si rientra nel ciclo di produzione secondo il processo ordinario, fino a una nuova RC e a una revisione esterna proporzionata all'entità delle modifiche.
-
----
-
-## 12. Interoperabilità e riuso
-
-Il metodo è pensato per essere usato fra organizzazioni diverse: si fonda su standard aperti, non crea dipendenze da un fornitore e non impone l'adozione di nuovi sistemi.
-Segue la corrispondenza con i quattro livelli del **European Interoperability Framework (EIF)**.
-
-**Interoperabilità tecnica.** Git è uno standard aperto, compatibile con qualunque catena di strumenti; il formato di lavoro è testo semplice, leggibile anche senza software dedicato.
-Nessun componente del metodo è proprietario: l'unico elemento legato a un prodotto specifico è il file che rinvia al documento di avvio, tenuto separato apposta perché si possa sostituire.
-Nelle applicazioni di riferimento le bozze sono circolate all'interno dell'ente con gli strumenti di collaborazione già in uso, che sono una scelta dell'ente e non un requisito del metodo.
-
-**Interoperabilità semantica.** I registri sono fatti perché il significato si conservi passando fra persone, uffici e strumenti: a ogni file corrisponde una funzione dichiarata.
-I documenti finali sono prodotti nei formati standard dell'ente e si inseriscono nei sistemi documentali esistenti senza imporne di nuovi.
-L'analisi di completezza verifica la coerenza del prodotto con il corpus normativo vigente.
-
-**Interoperabilità organizzativa.** Le sei fasi e i ruoli del metodo sono un modello di governance esplicito, adottabile senza adattamenti e trasferibile ad altre amministrazioni.
-È la componente del metodo più facile da riusare, perché non dipende da alcuna tecnologia.
-
-**Interoperabilità giuridica.** Il metodo si fonda su licenze già in dotazione e su strumenti standard: non introduce vincoli contrattuali né barriere ulteriori.
-La tracciabilità garantita dai registri fornisce le evidenze che un'amministrazione deve poter mostrare sull'uso di sistemi di IA: che cosa è stato chiesto, che cosa è stato prodotto, chi ha deciso e chi ha convalidato.
-
-**Comunicazione e apertura.** L'iniziativa è pubblica su due piani.
-Verso l'esterno, il metodo è pubblicato per intero in un repository aperto, con licenza CC BY 4.0 e dichiarazione di licenza leggibile da una macchina secondo la specifica REUSE 3.3: chiunque può esaminarlo, riusarlo e proporne modifiche con una issue o una pull request, e la tracciabilità dei registri rende ispezionabile dall'esterno l'uso del sistema di IA.
-Verso l'interno, il metodo è documentato per intero ed è applicato nell'Ufficio Servizi per la Transizione al Digitale che lo ha prodotto: chi partecipa alla redazione lavora su registri scritti e condivisi, non su conoscenza tacita.
-Lo scioglimento del cieco previsto al termine della revisione esterna è il momento in cui questa apertura entra nel processo: ai revisori viene detto come il testo è stato prodotto, e i colleghi che convalidano i documenti sono così resi consapevoli, in modo esplicito, dell'uso del sistema di IA.
-
-**Contributi.** Il repository è aperto ai contributi.
-Osservazioni, correzioni e proposte di modifica si presentano con una issue o una pull request, oppure scrivendo al contatto indicato in fondo al documento.
+**How it is run.** A medium-term review re-enters from Phase 1: the context is reopened, changes in the sources are checked, the manifest is updated.
+If changes emerge, the ordinary process resumes in the production cycle, up to a new RC and an external review proportionate to the extent of the changes.
 
 ---
 
-## 13. Applicazioni di riferimento ed esiti osservati
+## 12. Interoperability and reuse
 
-Le sezioni precedenti descrivono il metodo.
-Questa racconta l'esperienza da cui il metodo deriva e ciò che vi è stato osservato.
+The method is designed to be used across different organisations: it rests on open standards, creates no supplier dependency and imposes the adoption of no new systems.
+What follows is the correspondence with the four layers of the **European Interoperability Framework (EIF)**.
 
-### 13.1 I due progetti
+**Technical interoperability.** Git is an open standard, compatible with any toolchain; the working format is plain text, readable even without dedicated software.
+No component of the method is proprietary: the only element tied to a specific product is the file that refers on to the project brief, kept separate on purpose so that it can be replaced.
+In the reference applications the drafts circulated inside the administration using the collaboration tools already in use, which are a choice of the administration and not a requirement of the method.
 
-Il metodo è stato costruito lavorando, non a tavolino.
-Le due applicazioni sono documenti reali di un'università pubblica, entrambi destinati all'adozione formale.
-Sono descritti per tipologia, senza indicarne gli estremi.
+**Semantic interoperability.** The registers exist so that meaning is preserved as work passes between people, offices and tools: each file has a declared function.
+The final documents are produced in the administration's standard formats and fit into the existing document systems without imposing new ones.
+The completeness analysis checks the consistency of the product against the body of rules in force.
 
-**Primo caso: un manuale tecnico previsto da linee guida nazionali**, corredato di una decina di allegati e adottato con atto del vertice amministrativo.
-È il più impegnativo dei due: il contesto comprendeva atti dell'ente, contratti, manuali di un fornitore esterno e accordi operativi, per circa **1.150 pagine equivalenti di documentazione analizzata**.
-La lavorazione ha richiesto **otto giornate effettive**, con **27 commit**, e ha prodotto **83 file di testo per circa 136.000 parole** fra bozze, allegati e registri.
+**Organisational interoperability.** The six phases and the roles of the method are an explicit governance model, adoptable without adaptation and transferable to other administrations.
+It is the component of the method that is easiest to reuse, because it depends on no technology.
 
-**Secondo caso: un regolamento interno sull'uso di uno strumento digitale da parte del personale.** Un testo più breve ma con un impianto normativo denso, che tocca protezione dei dati, rapporto di lavoro e continuità del servizio.
-Contesto di circa **220 pagine equivalenti**, **cinque giornate effettive** di lavoro, **23 commit**, **18 file per circa 78.000 parole**, **dieci versioni** del regolamento, cinque delle quali annotate dalla persona e recepite dal modello.
+**Legal interoperability.** The method rests on licences already held and on standard tools: it introduces no contractual constraints and no further barriers.
+The traceability guaranteed by the registers supplies the evidence an administration must be able to show about its use of AI systems: what was asked, what was produced, who decided and who validated.
 
-Nel complesso:
-**50 commit, tredici giornate di lavoro effettivo, circa 1.370 pagine di documentazione analizzata, circa 214.000 parole prodotte.** L'ambiente era un server Linux condiviso già esistente, senza alcuna infrastruttura dedicata al progetto e senza acquisti: shell, filesystem, Git e due strumenti a riga di comando coperti da licenze già in uso nell'ente.
+**Communication and openness.** The initiative is public on two planes.
+Outwardly, the method is published in full in an open repository, under the CC BY 4.0 licence and with a machine-readable licensing declaration following the REUSE 3.3 specification: anyone can examine it, reuse it and propose changes through an issue or a pull request, and the traceability of the registers makes the use of the AI system inspectable from outside.
+Inwardly, the method is documented in full and is applied in the office that produced it: whoever takes part in the drafting works on written, shared registers, not on tacit knowledge.
+The unblinding provided for at the end of the external review is the moment when this openness enters the process: the reviewers are told how the text was produced, and the colleagues who validate the documents are thereby made explicitly aware of the use of the AI system.
 
-Il dato più utile non è nessuno di questi numeri, ma il loro rapporto.
-Tredici giornate di lavoro effettivo su documentazione di questa mole non sarebbero state sufficienti con il metodo tradizionale, e non lo sarebbero nemmeno con un modello usato senza registri: sarebbe mancato ciò che permette di riprendere il lavoro il giorno dopo senza ricostruire il contesto.
-Il tempo risparmiato non viene dalla velocità di scrittura del modello, ma dal fatto che nessuna sessione ricomincia da zero.
-
-### 13.2 L'esito della revisione esterna
-
-Nel primo caso la revisione esterna ha coinvolto, di volta in volta, gli uffici competenti per le materie trattate, e ha impegnato circa tre giornate/persona complessive.
-I revisori hanno fornito pareri tecnici sui punti che ritenevano più delicati, integrando il testo dove necessario: le modifiche richieste sono state minime e l'impianto complessivo non è stato toccato.
-Il cieco è stato sciolto a revisione conclusa, prima dell'adozione.
-
-Interpellato dopo lo scioglimento, uno degli uffici revisori ha descritto l'esperienza; il giudizio è citato con il suo consenso, in forma anonima, per quello che dice e per quello che non nasconde.
-Sulla qualità: «Nel complesso, il documento offriva una base solida ed era decisamente completo, reggendo bene il confronto con testi analoghi».
-L'integrazione è venuta dove doveva venire: il revisore governa in prima persona alcuni dei processi trattati, le cui specifiche di dettaglio «erano in mio esclusivo possesso», e il suo apporto ha reso quelle spiegazioni «realmente precise, accurate e utilizzabili dal lettore».
-
-Sulla tenuta del cieco: il sospetto dell'uso di un modello è stato «molto lieve e del tutto circoscritto», limitato a «un paio di frasi» che il revisore ha attribuito a una rilettura assistita di quei soli passaggi: «Non ho affatto pensato a un testo generato da zero».
-Dopo lo scioglimento: «Il mio giudizio rimane del tutto invariato», con un testo giudicato «quasi del tutto indistinguibile dalla scrittura umana».
-
-La conclusione del revisore coincide con la tesi su cui il metodo è costruito, ed è tanto più credibile perché formulata da chi, mentre revisionava, non conosceva il metodo: «l'IA può preparare un ottimo contenitore teorico, ma il contributo di chi governa i processi sul campo resta indispensabile per arricchire quel contenitore con le specifiche operative che nessuna macchina può possedere».
-
-### 13.3 Portabilità verificata
-
-A mesi di distanza dalla chiusura dei due progetti, un modello di un fornitore diverso da quelli impiegati, senza alcun contatto con le persone coinvolte, ha ricostruito lo stato dei progetti leggendo soltanto i registri: che cosa era stato prodotto, quali fonti erano state usate, quali questioni erano rimaste aperte e perché le scelte erano state fatte in quel modo.
-Non è stato necessario parlare con nessuno.
-
-Nello stesso periodo, all'interno del primo dei due progetti, due strumenti di fornitori diversi hanno lavorato sullo stesso repository leggendo gli stessi registri, con perimetri scritti in file distinti.
-È un'evidenza diretta del principio di portabilità: il costo del passaggio è stato la sola analisi dei file del progetto.
-
-### 13.4 Frequenza delle domande di chiarimento
-
-Nelle applicazioni di riferimento, le domande di chiarimento poste dal modello sono state **poco frequenti**, anche quando le istruzioni le sollecitavano espressamente.
-È l'osservazione da cui deriva la regola enunciata per la prima bozza: le domande vanno chieste, ma il controllo non può fondarsi su di esse.
-
-Quando però la domanda arriva, il rendimento è alto.
-Il modello, una volta ottenute le risposte dall'operatore, le rielabora e allarga l'analisi individuando, se ci sono, lacune nella documentazione prodotta e adottando le scelte prese.
-
-L'esito mostra a che cosa serve il metodo: il modello non prende decisioni al posto dell'operatore.
-Quando non sa come procedere, pone una domanda.
-
-### 13.5 Numero di iterazioni
-
-Nelle applicazioni di riferimento sono serviti da due a tre giri del ciclo di produzione per portare un documento dalla prima bozza a una versione consolidata.
-Il dato non è stato misurato in modo sistematico e cambia con l'estensione del corpus e con quanto è definito il mandato iniziale.
-
-### 13.6 Retroazione sui processi
-
-Le lacune rilevate durante la revisione non riguardano soltanto il documento in lavorazione.
-Una parte di esse nasce a monte, nel modo in cui l'organizzazione lavora, e il fatto che emergano è un esito del metodo distinto dal documento prodotto.
-È l'osservazione più ricorrente delle due applicazioni: in entrambi i casi la revisione del testo ha finito per mettere in luce problemi che il testo, da solo, non poteva risolvere.
-
-I tipi ricorrenti sono tre.
-Le **lacune organizzative**: un adempimento previsto dalle norme che nessuna struttura ha in carico, oppure un compito assegnato a un ufficio che nel frattempo ha cambiato competenze.
-Le **lacune nei flussi documentali**: documenti che dovrebbero essere prodotti quando accade un certo fatto e non lo sono, oppure che vengono prodotti e non conservati, o conservati e non ritrovabili.
-Le **lacune di titolarità**: attività che si svolgono davvero ma non hanno un responsabile formalmente individuato, e che emergono nel momento in cui il documento deve indicarlo.
-
-Nessuno di questi problemi si risolve cambiando il testo.
-La revisione però li rende visibili e documentati: il documento in lavorazione funziona come strumento diagnostico sull'organizzazione che lo produce.
-L'esito dovrebbe essere raccolto in un elenco a parte, indirizzato alle strutture competenti, e può portare a interventi organizzativi (riattribuzione di competenze, ridefinizione di flussi, adozione di atti mancanti) che vanno oltre la produzione documentale.
-Quegli interventi non fanno parte del metodo descritto qui, ma il metodo li rende visibili.
-
-### 13.7 Efficienza e costo evitato
-
-**Efficienza rispetto al metodo tradizionale.** Un manuale confrontabile, dello stesso ambito e della stessa mole, era stato prodotto in precedenza da una sola persona in circa otto mesi di tempo di calendario, svolti insieme agli altri compiti d'ufficio e con un risultato ancora incompleto.
-Con il metodo, un documento equivalente e pienamente tracciabile è stato completato in **otto giornate/persona effettive**.
-Espresso nella stessa unità di misura, e nell'ipotesi prudente che solo una frazione di quegli otto mesi sia stata effettivamente dedicata al manuale (fra le 25 e le 40 giornate/persona effettive), il confronto indica una riduzione stimata **fra il 65 e l'80 per cento dello sforzo esperto**, con la consegna compressa da mesi a giorni e un risultato più completo.
-Il dato sullo sforzo tradizionale è una stima basata sul ricordo, ed è dichiarato come tale: è lo stesso principio per cui il metodo chiede che le assunzioni siano rese esplicite invece di essere presentate come misure.
-
-**Valore pubblico e costo evitato.** Il risultato è stato ottenuto senza alcuna infrastruttura dedicata e senza acquisti, su un server Linux già esistente e con licenze già in dotazione all'ente: il costo marginale del progetto è prossimo a zero.
-Oltre all'efficienza, il metodo produce valore che la sola scrittura tradizionale non replica: la tracciabilità verificabile dell'uso dell'IA (che cosa è stato chiesto, che cosa è stato prodotto, chi ha deciso e validato), un'accountability difendibile nel tempo e, come esito documentato, l'emersione di lacune organizzative che il testo da solo non avrebbe reso visibili.
+**Contributions.** The repository is open to contributions.
+Observations, corrections and proposed changes are submitted through an issue or a pull request, or by writing to the contact given at the end of this document.
 
 ---
 
-## 14. Limiti
+## 13. Reference applications and observed outcomes
 
-I limiti che seguono sono noti e dichiarati.
-Alcuni si possono attenuare, nessuno si elimina: chi adotta il metodo deve conoscerli prima, non scoprirli durante.
+The preceding sections describe the method.
+This one recounts the experience the method derives from, and what was observed in it.
 
-**Il metodo non decide.** Il modello propone testo; la decisione e la validazione restano della persona, e ogni contenuto DEVE essere verificato.
-Questo limite non è un'avvertenza di stile: il modello può produrre affermazioni errate o incomplete con la stessa fluidità con cui produce quelle corrette, e la forma del testo non permette di distinguerle.
-È la ragione per cui il metodo prevede una revisione umana su ogni giro e una revisione esterna prima del rilascio, e non si accontenta di un controllo finale.
+### 13.1 The two projects
 
-**Riferimenti normativi errati o inesistenti.** È il caso particolare più pericoloso del limite precedente, e merita di essere detto a parte.
-Il modello può citare un articolo che non esiste, attribuire una disposizione all'atto sbagliato o richiamare una versione non più vigente, in una forma perfettamente plausibile: il numero è verosimile, il titolo dell'atto è corretto, la frase è ben costruita.
-Il manifest delle fonti riduce il rischio, perché obbliga a conservare gli identificativi stabili degli atti, ma non lo elimina.
-**Ogni riferimento normativo presente nel testo finale DEVE essere verificato sulla fonte ufficiale da una persona.** Affidare il controllo a un secondo modello non è, allo stato, una soluzione: sposta il problema senza risolverlo.
+The method was built by working, not at a desk.
+The two applications are real documents of a public university, both intended for formal adoption.
+They are described by type, without giving their particulars.
 
-**Errori ricorrenti del modello.** Due si sono ripetuti al punto da richiedere una regola.
-Il primo: il modello tratta i documenti presenti solo per inquadramento (dottrina, articoli, presentazioni) con lo stesso peso delle fonti principali, e ne fa derivare affermazioni come se fossero vincolanti; la correzione consiste nell'elencare espressamente, nel documento di avvio, i documenti da non usare come base.
-Il secondo, opposto: nei passaggi importanti il modello tende a produrre elenchi troppo sintetici, perdendo l'argomentazione che serviva proprio lì; la correzione consiste nel chiedere che il passaggio venga esteso.
-Nessuno dei due si risolve una volta per tutte: si ripresentano, e riconoscerli fa parte del lavoro di chi conduce la lavorazione.
+**First case: a technical manual required by national guidelines**, accompanied by some ten annexes and adopted by act of the administrative head.
+It is the more demanding of the two: the context comprised acts of the administration, contracts, an external supplier's manuals and operating agreements, amounting to about **1,150 equivalent pages of documentation analysed**.
+The work took **eight effective working days**, with **27 commits**, and produced **83 text files of about 136,000 words** between drafts, annexes and registers.
 
-**I risultati non sono riproducibili nel tempo.** La stessa richiesta, rivolta allo stesso modello in una versione successiva, non produce lo stesso testo.
-Il metodo garantisce la tracciabilità di ciò che è stato prodotto (che cosa è stato chiesto, che cosa è stato risposto, che cosa è stato deciso) ma non la ripetibilità della produzione: nessuno può rieseguire la lavorazione e ottenere di nuovo quel documento.
-La conseguenza operativa è che l'evidenza da conservare sono gli artefatti e i registri, non le istruzioni impartite: chi pensa di poter «rigenerare» un documento a partire dai prompt conservati si troverà con un testo diverso, e dovrà rivederlo daccapo.
+**Second case: an internal regulation on the use of a digital tool by staff.** A shorter text but with a dense regulatory structure, touching on data protection, the employment relationship and continuity of service.
+A context of about **220 equivalent pages**, **five effective working days**, **23 commits**, **18 files of about 78,000 words**, **ten versions** of the regulation, five of them annotated by the person and carried out by the model.
 
-**Il risultato dipende dalla qualità del contesto.** Un contesto incompleto o disordinato produce risultati deboli, e il modello non lo segnala: lavora con ciò che ha.
-La Fase 1 non è opzionale, e il tempo che sembra di risparmiare saltandola si ripresenta moltiplicato nel ciclo di produzione.
+Overall:
+**50 commits, thirteen effective working days, about 1,370 pages of documentation analysed, about 214,000 words produced.** The environment was an existing shared Linux server, with no infrastructure dedicated to the project and no purchases: shell, filesystem, Git and two command-line tools covered by licences already in use in the administration.
 
-**Verifica giuridica.** Per documentazione con effetti giuridici la validazione da parte di competenze qualificate resta indispensabile, e il metodo non la sostituisce: rende ispezionabile il percorso che ha portato al testo, non ne certifica la correttezza.
+The most useful figure is none of these, but the ratio between them.
+Thirteen effective working days on documentation of this size would not have sufficed with the traditional method, and would not suffice with a model used without registers either: what would be missing is what allows the work to be picked up again the next day without reconstructing the context.
+The time saved does not come from the model's writing speed, but from the fact that no session starts again from nothing.
 
-**Non è adatto a documenti brevi o urgenti.** L'apparato di registri, manifest e cicli si ripaga su lavorazioni lunghe e complesse, che si interrompono e riprendono nel tempo e coinvolgono più persone.
-Su una nota di due pagine da consegnare in giornata il costo di allestimento non si recupera.
-Il metodo è tarato su documentazione normativa e gestionale complessa: applicarlo fuori da quel perimetro produce burocrazia senza contropartita.
+### 13.2 The outcome of the external review
+
+In the first case the external review involved, case by case, the offices competent for the matters dealt with, and took about three person-days in all.
+The reviewers gave technical opinions on the points they considered most sensitive, integrating the text where necessary: the changes requested were minimal and the overall structure was left untouched.
+The blind was dissolved once the review was concluded, before adoption.
+
+Asked after the unblinding, one of the reviewing offices described the experience; the judgement is quoted with its consent, anonymously, for what it says and for what it does not conceal.
+On quality: "Overall, the document offered a solid base and was decidedly complete, standing up well to comparison with similar texts".
+The integration came where it had to come: the reviewer personally runs some of the processes dealt with, whose detailed specifications "were in my exclusive possession", and their contribution made those explanations "genuinely precise, accurate and usable by the reader".
+
+On how the blind held: the suspicion that a model had been used was "very slight and entirely circumscribed", limited to "a couple of sentences" which the reviewer put down to an assisted rereading of those passages alone: "I never thought of a text generated from scratch".
+After the unblinding: "My judgement remains entirely unchanged", of a text considered "almost entirely indistinguishable from human writing".
+
+The reviewer's conclusion coincides with the thesis the method is built on, and is the more credible for having been formulated by someone who, while reviewing, did not know the method: "AI can prepare an excellent theoretical container, but the contribution of those who govern the processes in the field remains indispensable to enrich that container with the operational specifics that no machine can possess".
+
+The quotations are translated from the reviewer's Italian; that wording is quoted in the Italian version of this specification.
+
+### 13.3 Portability, verified
+
+Months after the two projects closed, a model from a supplier other than those employed, with no contact with the people involved, reconstructed the state of the projects by reading the registers alone: what had been produced, which sources had been used, which questions had remained open and why the choices had been made the way they were.
+There was no need to talk to anyone.
+
+In the same period, inside the first of the two projects, tools from two different suppliers worked on the same repository reading the same registers, with their perimeters written in separate files.
+It is direct evidence of the principle of portability: the cost of the change was no more than the analysis of the project's files.
+
+### 13.4 Frequency of clarification questions
+
+In the reference applications the clarification questions put by the model were **infrequent**, even when the instructions expressly invited them.
+It is the observation from which the rule stated for the first draft derives: questions are to be asked for, but control cannot rest on them.
+
+When a question does come, however, the return is high.
+Once the model has the operator's answers, it reworks them and widens the analysis, identifying any gaps in the documentation produced and adopting the choices taken.
+
+The outcome shows what the method is for: the model does not take decisions in the operator's place.
+When it does not know how to proceed, it puts a question.
+
+### 13.5 Number of iterations
+
+In the reference applications two to three turns of the production cycle were needed to bring a document from the first draft to a consolidated version.
+The figure was not measured systematically and varies with the size of the corpus and with how well defined the initial mandate is.
+
+### 13.6 Feedback on the processes
+
+The gaps found during the review do not concern only the document being worked on.
+Some of them arise further upstream, in the way the organisation works, and the fact that they surface is an outcome of the method distinct from the document produced.
+It is the most recurrent observation of the two applications: in both cases reviewing the text ended up bringing to light problems that the text, on its own, could not solve.
+
+There are three recurrent types.
+**Organisational gaps**: a duty required by the rules that no structure is responsible for, or a task assigned to an office whose competences have changed in the meantime.
+**Gaps in the document flows**: documents that ought to be produced when a certain event occurs and are not, or that are produced and not preserved, or preserved and not retrievable.
+**Gaps in ownership**: activities that really are carried out but have no formally identified owner, and that surface at the moment the document has to name one.
+
+None of these problems is solved by changing the text.
+The review, however, makes them visible and documented: the document being worked on functions as a diagnostic instrument on the organisation that produces it.
+The outcome should be collected in a separate list, addressed to the competent structures, and may lead to organisational measures (reassignment of competences, redefinition of flows, adoption of missing acts) that go beyond the production of documents.
+Those measures are not part of the method described here, but the method makes them visible.
+
+### 13.7 Efficiency and cost avoided
+
+**Efficiency compared with the traditional method.** A comparable manual, in the same field and of the same size, had previously been produced by a single person over about eight months of calendar time, carried out alongside other office duties and with a result that was still incomplete.
+With the method, an equivalent and fully traceable document was completed in **eight effective person-days**.
+Expressed in the same unit, and on the prudent assumption that only a fraction of those eight months was actually devoted to the manual (between 25 and 40 effective person-days), the comparison indicates an estimated reduction of **between 65 and 80 per cent of expert effort**, with delivery compressed from months to days and a more complete result.
+The figure for the traditional effort is an estimate based on recollection, and is declared as such: it is the same principle by which the method requires assumptions to be made explicit instead of being presented as measurements.
+
+**Public value and cost avoided.** The result was obtained with no dedicated infrastructure and no purchases, on an existing Linux server and with licences the administration already held: the project's marginal cost is close to zero.
+Beyond efficiency, the method produces value that traditional writing alone does not replicate: verifiable traceability of the use of AI (what was asked, what was produced, who decided and who validated), accountability that is defensible over time and, as a documented outcome, the surfacing of organisational gaps that the text alone would not have made visible.
 
 ---
 
-## 15. Riferimenti
+## 14. Limitations
 
-- Repository del metodo: https://github.com/uniurbit/memento-ai-docs.git
-- Licenza: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), per ogni file del repository
-- Contatto:
+The limitations below are known and declared.
+Some can be mitigated, none can be eliminated: whoever adopts the method should know them beforehand, not discover them along the way.
+
+**The method does not decide.** The model proposes text; the decision and the validation remain the person's, and every content MUST be verified.
+This limitation is not a stylistic caveat: the model can produce erroneous or incomplete statements with the same fluency with which it produces correct ones, and the form of the text does not allow them to be told apart.
+It is the reason the method provides for a human review at every turn and an external review before release, and does not settle for a final check.
+
+**Wrong or non-existent legal references.** This is the most dangerous particular case of the previous limitation, and deserves to be stated separately.
+The model can cite an article that does not exist, attribute a provision to the wrong act, or invoke a version no longer in force, in a perfectly plausible form: the number looks right, the title of the act is correct, the sentence is well constructed.
+The source manifest reduces the risk, because it compels the stable identifiers of the acts to be preserved, but it does not eliminate it.
+**Every legal reference in the final text MUST be verified against the official source by a person.** Entrusting the check to a second model is not, as things stand, a solution: it moves the problem without solving it.
+
+**Recurrent errors of the model.** Two recurred often enough to call for a rule.
+The first: the model treats documents present only for background (scholarly writing, articles, presentations) with the same weight as primary sources, and derives statements from them as though they were binding; the correction consists in expressly listing, in the project brief, the documents not to be used as a basis.
+The second, its opposite: in important passages the model tends to produce over-compressed lists, losing precisely the argument that was needed there; the correction consists in asking for the passage to be extended.
+Neither is settled once and for all: they come back, and recognising them is part of the work of whoever runs the drafting.
+
+**The results are not reproducible over time.** The same request, put to the same model in a later version, does not produce the same text.
+The method guarantees traceability of what was produced (what was asked, what was answered, what was decided) but not repeatability of the production: no one can rerun the work and obtain that document again.
+The operational consequence is that the evidence to be preserved consists of the artefacts and the registers, not the instructions given: anyone who thinks a document can be "regenerated" from stored prompts will end up with a different text, and will have to review it from scratch.
+
+**The result depends on the quality of the context.** An incomplete or disorderly context produces weak results, and the model does not say so: it works with what it has.
+Phase 1 is not optional, and the time that seems to be saved by skipping it comes back multiplied in the production cycle.
+
+**Legal verification.** For documentation with legal effects, validation by qualified expertise remains indispensable, and the method does not replace it: it makes the path that led to the text inspectable, it does not certify that the text is correct.
+
+**It is not suited to short or urgent documents.** The apparatus of registers, manifest and cycles pays for itself on long, complex pieces of work that stop and start over time and involve several people.
+On a two-page note to be delivered the same day, the set-up cost is not recovered.
+The method is calibrated for complex regulatory and management documentation: applying it outside that perimeter produces bureaucracy with nothing in return.
+
+---
+
+## 15. References
+
+- Repository of the method: https://github.com/uniurbit/memento-ai-docs.git
+- Licence: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), for every file in the repository
+- Contact:
   [ufficio.transizionedigitale@uniurb.it](mailto:ufficio.transizionedigitale@uniurb.it)
 
-**Una sola licenza, per ogni file.** L'intero repository è sotto CC BY 4.0: la specifica, i template compilabili e lo script di cattura delle interazioni.
-Chi lo riusa, in tutto o in parte, deve soltanto citarne la provenienza.
-Il file `LICENSE` ne riporta il testo integrale, ed è quello che le piattaforme di hosting rilevano e mostrano.
+**One licence, for every file.** The whole repository is under CC BY 4.0: the specification, the fillable templates and the interaction-capture script.
+Anyone reusing it, in whole or in part, need only cite where it came from.
+The `LICENSE` file carries the full text, and it is the file that hosting platforms detect and display.
 
-**I documenti che produce chi adotta il metodo non sono coperti da questa licenza.** I template sono fatti per essere compilati: il mandato, i registri e le bozze che un'amministrazione scrive usandoli sono opere sue, di cui dispone liberamente.
-La licenza copre i file distribuiti qui, non ciò che si scrive dentro di essi.
-Nessun obbligo di attribuzione, di condivisione o di reciprocità ricade quindi sugli atti dell'ente adottante.
+**The documents produced by whoever adopts the method are not covered by this licence.** The templates are made to be filled in: the mandate, the registers and the drafts an administration writes using them are its own works, of which it disposes freely.
+The licence covers the files distributed here, not what is written inside them.
+No obligation of attribution, sharing or reciprocity therefore falls on the acts of the adopting administration.
 
-**Dichiarazione leggibile da una macchina.** Il repository è conforme alla specifica [REUSE 3.3](https://reuse.software/spec-3.3/) della Free Software Foundation Europe, che l'ecosistema europeo del riuso già adotta.
-La cartella `LICENSES/` contiene il testo della licenza con il suo nome SPDX, `REUSE.toml` la associa a tutti i percorsi del repository e lo script porta l'intestazione `SPDX-License-Identifier` al proprio interno.
-Un valutatore, o uno strumento automatico, può quindi stabilire file per file sotto quale licenza si trova, senza doverlo dedurre dal testo.
+**Machine-readable declaration.** The repository conforms to the [REUSE 3.3](https://reuse.software/spec-3.3/) specification of the Free Software Foundation Europe, which the European reuse ecosystem already adopts.
+The `LICENSES/` folder holds the text of the licence with its SPDX name, `REUSE.toml` associates it with all the paths in the repository, and the script carries the `SPDX-License-Identifier` header inside itself.
+An evaluator, or an automated tool, can therefore establish file by file which licence applies, without having to deduce it from the text.
 
 ---
 
-## Appendice 1 – Che cos'è Git
+## Appendix 1 – What Git is
 
-Appendice divulgativa, rivolta a chi non ha esperienza informatica.
-Non contiene prescrizioni: quelle sono nel corpo del documento e nei registri.
+An explanatory appendix, addressed to readers without a computing background.
+It contains no prescriptions: those are in the body of the document and in the registers.
 
-### Che cos'è
+### What it is
 
-Git è un registro delle versioni di una cartella di lavoro.
-Ogni volta che si decide di fissare uno stato del lavoro, Git conserva una copia completa di tutti i file e di tutte le sottocartelle, con la data, il nome di chi ha fissato lo stato e una breve descrizione.
-Le copie non si sovrascrivono: nella cartella resta sempre l'ultima versione, mentre tutte le precedenti restano disponibili e non modificabili.
+Git is a register of the versions of a working folder.
+Every time one decides to fix a state of the work, Git keeps a complete copy of all the files and all the subfolders, with the date, the name of whoever fixed that state, and a short description.
+The copies do not overwrite one another: the folder always holds the latest version, while all the earlier ones remain available and unmodifiable.
 
-### Come funziona
+### How it works
 
-Si lavora sui file nel modo consueto e con gli strumenti consueti: si scrive, si corregge, si cancella.
-Quando lo si decide, si chiede a Git di fare una «istantanea» di tutto quello che si è fatto.
-La registrazione si chiama *commit* e contiene quattro informazioni: chi ha salvato, quando, che cosa è cambiato rispetto alla versione precedente e per quale ragione.
-Quest'ultima è il messaggio che accompagna il commit: lo sceglie chi esegue il commit e può essere molto sintetico o molto esplicativo.
+One works on the files in the usual way and with the usual tools: writing, correcting, deleting.
+When one decides to, one asks Git to take a "snapshot" of everything that has been done.
+The record is called a *commit* and holds four pieces of information: who saved, when, what changed with respect to the previous version, and for what reason.
+The last of these is the message accompanying the commit: it is chosen by whoever makes the commit and may be very terse or very explanatory.
 
-Da questa struttura derivano tre possibilità che una normale cartella di lavoro non offre:
+Three possibilities follow from this structure that an ordinary working folder does not offer:
 
-- **confronto tra versioni dei documenti**: si vede quali righe sono cambiate fra due versioni, senza rileggere l'intero documento;
-- **recupero delle vecchie versioni**: si può tornare a una versione precedente anche a distanza di mesi, senza aver dovuto prevedere in anticipo che sarebbe servita;
-- **lavoro in parallelo**: più persone possono lavorare su copie separate, dette rami, e riunire poi il lavoro; se hanno modificato lo stesso passaggio, Git lo segnala invece di sovrascriverlo.
+- **comparison between versions of the documents**: one sees which lines changed between two versions, without rereading the whole document;
+- **recovery of old versions**: one can go back to an earlier version even months later, without having had to foresee that it would be needed;
+- **working in parallel**: several people can work on separate copies, called branches, and then bring the work together; if they have modified the same passage, Git reports it instead of overwriting it.
 
-Tutto questo risiede in una sottocartella nascosta del progetto.
-Non occorre attivare un servizio esterno e i documenti restano dove sono.
+All of this resides in a hidden subfolder of the project.
+No external service has to be activated and the documents stay where they are.
 
-### Come viene usato nel metodo
+### How the method uses it
 
-Nel metodo i comandi non si eseguono a mano: li esegue il modello, al termine di ciascun giro del ciclo di produzione e a ogni passaggio di fase, secondo le istruzioni contenute in `registri/INSTRUCTIONS.md`.
-Alla persona restano la decisione nel merito, l'annotazione delle bozze e la verifica di ciò che è stato registrato.
-Come si inizializza il repository e quale convenzione seguono i messaggi di commit è descritto nella Fase 1; i divieti che non ammettono eccezioni sono in `registri/INSTRUCTIONS.md`; il lavoro di più redattori sullo stesso corpus è nell'[Appendice tecnica 4](#appendice-tecnica-4--collaborazione-fra-più-redattori).
+In the method the commands are not run by hand: the model runs them, at the end of each turn of the production cycle and at every change of phase, following the instructions held in `REGISTERS/INSTRUCTIONS.md`.
+What remains with the person is the decision on the merits, the annotation of the drafts, and the checking of what has been recorded.
+How the repository is initialised and which convention the commit messages follow is described in Phase 1; the prohibitions that admit no exception are in `REGISTERS/INSTRUCTIONS.md`; the work of several drafters on the same corpus is in [Technical appendix 4](#technical-appendix-4--collaboration-between-several-drafters).
 
-Una precisazione utile a chi legge la cronologia:
-Git registra i documenti, non lo scambio con il modello.
-Le richieste e le risposte sono conservate in un registro dedicato, alimentato mentre la sessione si svolge ([Appendice tecnica 2](#appendice-tecnica-2--larchivio-delle-interazioni)).
-Le due tracce sono complementari e nessuna sostituisce l'altra.
+One clarification is useful to whoever reads the history:
+Git records the documents, not the exchange with the model.
+The requests and the answers are kept in a dedicated register, fed while the session is under way ([Technical appendix 2](#technical-appendix-2--the-interaction-archive)).
+The two trails are complementary and neither replaces the other.
 
-### Perché è stato scelto
+### Why it was chosen
 
-**Rende verificabile ciò che è avvenuto.** In un lavoro svolto con un modello occorre poter mostrare a un terzo quale versione ha prodotto il modello, quale osservazione umana è intervenuta e, per confronto, quali modifiche ha effettuato il modello.
-Tutto questo è possibile grazie a Git.
+**It makes what happened verifiable.** In work carried out with a model one must be able to show a third party which version the model produced, which human observation intervened, and, by comparison, which changes the model made.
+All of this is possible thanks to Git.
 
-**L'ordine non dipende dalla diligenza di chi lavora.** Numerose copie di lavoro rinominate a mano, del tipo `documento_v2_finale_def`, producono archivi in cui non è più riconoscibile quale sia la versione valida e per quale motivo.
-Con Git l'ordine è garantito dallo strumento.
+**Order does not depend on the diligence of whoever is working.** Numerous working copies renamed by hand, of the `document_v2_final_def` kind, produce archives in which it is no longer possible to tell which version is the valid one, or why.
+With Git, order is guaranteed by the tool.
 
-**È gratuito, aperto e diffuso.** È lo standard corrente per il versionamento, non vincola a un fornitore, non comporta licenze né infrastruttura dedicata e resta leggibile a distanza di anni.
+**It is free, open and widespread.** It is the current standard for versioning, it ties one to no supplier, it involves no licences and no dedicated infrastructure, and it remains readable years later.
 
-**È adatto ai documenti di testo.** I file del metodo sono in formato testuale aperto e il confronto fra versioni avviene riga per riga; sui formati binari lo stesso confronto non sarebbe leggibile.
-Git è inoltre già presente negli ambienti Linux e già noto a chi ha esperienza di sviluppo: non introduce uno strumento nuovo da apprendere, ma riusa una competenza disponibile.
+**It suits text documents.** The method's files are in an open text format and the comparison between versions happens line by line; on binary formats the same comparison would not be readable.
+Git is moreover already present in Linux environments and already familiar to anyone with development experience: it does not introduce a new tool to be learnt, it reuses an available skill.
 
-### Che cos'è Markdown
+### What Markdown is
 
-Il formato testuale aperto adottato nel metodo si chiama Markdown, e i file che lo impiegano hanno estensione `.md`.
-Un file Markdown è un normale file di testo: si apre con qualunque editor, non richiede programmi particolari e resta leggibile anche fra molti anni.
-Su Windows sono adatti il Blocco note già presente nel sistema, Notepad++ e Visual Studio Code; su macOS TextEdit, BBEdit e ancora Visual Studio Code; su Linux gedit, Kate, o `nano` direttamente dal terminale.
-Alcuni programmi (Visual Studio Code, Typora, Obsidian) mostrano anche l'anteprima del testo già formattato, ma non sono necessari: il file resta lo stesso in ogni caso.
+The open text format adopted in the method is called Markdown, and the files that use it have the extension `.md`.
+A Markdown file is an ordinary text file: it opens with any editor, requires no particular program, and stays readable many years from now.
+On Windows, Notepad (already present in the system), Notepad++ and Visual Studio Code are all suitable; on macOS, TextEdit, BBEdit and again Visual Studio Code; on Linux, gedit, Kate, or `nano` straight from the terminal.
+Some programs (Visual Studio Code, Typora, Obsidian) also show a preview of the formatted text, but they are not necessary: the file stays the same in any case.
 
-La differenza rispetto a un file di testo qualsiasi sta in poche convenzioni di scrittura, che indicano la struttura del documento senza nasconderla in un formato interno:
+The difference from any other text file lies in a few writing conventions, which indicate the structure of the document without hiding it in an internal format:
 
 ```markdown
-# Titolo del documento
-## Titolo di sezione
+# Document title
+## Section title
 
-Un paragrafo si scrive normalmente.
+A paragraph is written normally.
 
-- un elenco puntato comincia con un trattino
-- e prosegue su righe successive
+- a bulleted list begins with a hyphen
+- and continues on the following lines
 
-Il testo **in grassetto** si racchiude fra due asterischi per parte.
+Text **in bold** is enclosed between two asterisks on each side.
 ```
 
-Le convenzioni si imparano in pochi minuti e il testo resta comprensibile anche a chi non le conosce: un titolo preceduto da un cancelletto si legge come un titolo in ogni caso.
+The conventions are learnt in a few minutes and the text stays comprehensible even to someone who does not know them: a title preceded by a hash reads as a title in any case.
 
-Il formato è stato scelto per tre ragioni.
-È leggibile dalla persona e dal modello senza conversioni intermedie.
-Consente a Git il confronto riga per riga, che su un file di videoscrittura non sarebbe possibile.
-Al momento del rilascio può essere convertito nei formati richiesti (PDF o documento di videoscrittura) senza che il testo di lavoro debba essere riscritto.
+The format was chosen for three reasons.
+It is readable by person and model alike with no intermediate conversion.
+It allows Git to compare line by line, which would not be possible on a word-processor file.
+At the moment of release it can be converted into the formats required (PDF or word-processor document) without the working text having to be rewritten.
 
 ---
 
-## Appendice tecnica 2 – L'archivio delle interazioni
+## Technical appendix 2 – The interaction archive
 
-Le modalità di scrittura di ciascun registro (modifica sul posto, aggiunta in fondo, alimentazione automatica) sono descritte in `registri/INSTRUCTIONS.md`.
-Dei quattro registri, tre si scrivono durante il lavoro come qualunque altro documento.
-Il quarto no, e la differenza va spiegata perché comporta una decisione da prendere in Fase 0.
+How each register is written (edited in place, added to at the end, fed automatically) is described in `REGISTERS/INSTRUCTIONS.md`.
+Of the four registers, three are written during the work like any other document.
+The fourth is not, and the difference has to be explained because it entails a decision to be taken in Phase 0.
 
-Ciò che l'archivio deve conservare (il testo esatto di ciò che è stato chiesto e di ciò che è stato risposto) esiste soltanto nel momento in cui il turno si svolge.
-Non è ricostruibile dopo:
-Git registra il documento, non lo scambio, e la memoria delle persone non basta.
-O si cattura mentre accade, o non esiste.
+What the archive has to preserve (the exact text of what was asked and of what was answered) exists only at the moment the turn takes place.
+It cannot be reconstructed afterwards:
+Git records the document, not the exchange, and people's memory is not enough.
+Either it is captured as it happens, or it does not exist.
 
-Le vie possibili sono due, e si escludono a vicenda.
+There are two possible routes, and they are mutually exclusive.
 
-*Prima via: uno script agganciato allo strumento.* Quasi tutti gli strumenti a riga di comando eseguono un comando esterno in corrispondenza di certi momenti del proprio funzionamento.
-Ne servono due: l'invio della richiesta e il completamento della risposta.
-Uno script agganciato a quei due momenti aggiunge il testo in fondo all'archivio.
-È la via da preferire per tre ragioni: copia il testo senza rielaborarlo, scatta sempre, e non consuma risorse di elaborazione.
-Questo repository fornisce l'implementazione (`strumenti/registra_interazione.py`, Python 3 e sola libreria standard) con l'avvertenza che l'aggancio è l'unico punto in cui il metodo tocca un prodotto specifico: adattarlo a un altro strumento richiede di modificare una sola parte dello script.
+*First route: a script hooked to the tool.* Almost all command-line tools run an external command at certain moments of their own operation.
+Two are needed: the sending of the request and the completion of the answer.
+A script hooked to those two moments appends the text to the end of the archive.
+It is the route to prefer, for three reasons: it copies the text without reworking it, it always fires, and it consumes no processing resources.
+This repository supplies the implementation (`TOOLS/record_interaction.py`, Python 3 and the standard library alone) with the caveat that the hook is the only point at which the method touches a specific product: adapting it to another tool means modifying a single part of the script.
 
-*Seconda via: la registrazione a carico del modello.* Quando lo strumento non segnala quei due momenti, al termine di ogni turno è il modello stesso a scrivere le due estremità.
-La via funziona, ma ha un costo e un limite.
-Il costo è di elaborazione: il testo va riprodotto, e riprodurlo consuma risorse proporzionate alla sua lunghezza, a ogni turno.
-Il limite è di altra natura: chi registra coincide con chi è registrato, la completezza dell'archivio dipende dal fatto che il modello non ometta di scrivere, e nessun controllo interno può rilevare l'omissione.
-Il metodo vi oppone due presidi (l'obbligo di trascrivere verbatim, senza sintesi non dichiarate, e la dichiarazione del modo di cattura in ogni record) che rendono la circostanza ispezionabile senza eliminarla.
+*Second route: recording carried out by the model.* When the tool does not signal those two moments, at the end of each turn it is the model itself that writes the two ends.
+The route works, but it has a cost and a limitation.
+The cost is computational: the text has to be reproduced, and reproducing it consumes resources in proportion to its length, at every turn.
+The limitation is of another nature: whoever records coincides with whoever is recorded, the completeness of the archive depends on the model not omitting to write, and no internal control can detect the omission.
+The method sets two safeguards against this (the obligation to transcribe verbatim, with no undeclared summarising, and the declaration of the capture mode in every record) which make the circumstance inspectable without eliminating it.
 
-### Aggancio e abilitazione dello script
+### Hooking up and enabling the script
 
-Dichiarare lo script non basta a metterlo in funzione.
-È il punto in cui l'adozione si blocca più spesso, e conviene spiegarlo per esteso.
+Declaring the script is not enough to put it into operation.
+This is the point at which adoption most often stalls, and it is worth explaining at length.
 
-**Perché serve un atto esplicito.** Un aggancio di questo tipo fa eseguire codice sulla macchina dell'utente a ogni turno, con i permessi dell'utente stesso.
-Per questo gli strumenti non lo attivano solo perché esiste un file di configurazione: chiedono un consenso separato, dato da una persona attraverso l'interfaccia dello strumento.
-Non è un ostacolo, è una garanzia, e in questo caso ne ha una seconda:
-**il modello che verrebbe registrato non può autorizzare il proprio registratore.** L'attivazione è, e deve restare, un atto umano.
+**Why an explicit act is needed.** A hook of this kind causes code to be run on the user's machine at every turn, with the user's own permissions.
+That is why tools do not activate it merely because a configuration file exists: they ask for separate consent, given by a person through the tool's interface.
+It is not an obstacle, it is a guarantee, and in this case it carries a second one:
+**the model that would be recorded cannot authorise its own recorder.** Activation is, and must remain, a human act.
 
-**I tre passi, uguali per qualunque strumento.**
+**The three steps, the same for any tool.**
 
-*Primo – dichiarazione.* Nel file di configurazione dello strumento si dichiarano due agganci, uno per evento, indicando il comando da eseguire e un tempo massimo di esecuzione.
-La dichiarazione DOVREBBE stare nella configurazione di progetto e non in quella dell'utente, così da viaggiare con il repository.
-Si tenga presente che **viaggia la dichiarazione, non l'abilitazione**.
+*First – declaration.* In the tool's configuration file two hooks are declared, one per event, giving the command to run and a maximum execution time.
+The declaration SHOULD sit in the project configuration and not in the user's, so that it travels with the repository.
+Bear in mind that **what travels is the declaration, not the enabling**.
 
 ```
-evento «richiesta inviata»    → comando: python3 strumenti/registra_interazione.py
-                                tempo massimo: 10 secondi
+event "request sent"        → command: python3 TOOLS/record_interaction.py
+                              maximum time: 10 seconds
 
-evento «risposta completata»  → comando: python3 strumenti/registra_interazione.py
-                                tempo massimo: 20 secondi
+event "answer completed"    → command: python3 TOOLS/record_interaction.py
+                              maximum time: 20 seconds
 ```
 
-*Secondo – abilitazione.* È l'atto umano.
-Cambia forma da prodotto a prodotto, ma ricorrono tre modalità: un comando interattivo che elenca gli agganci dichiarati e ne chiede l'approvazione uno per uno; una richiesta di conferma al primo avvio dopo la dichiarazione; oppure un'impostazione di fiducia riferita all'intera cartella di progetto.
-**L'abilitazione DEVE essere data per entrambi gli eventi.** Approvarne uno solo è di gran lunga il modo più frequente in cui ci si ritrova con un archivio dimezzato senza accorgersene.
+*Second – enabling.* This is the human act.
+Its form changes from product to product, but three modes recur: an interactive command that lists the declared hooks and asks for approval of each one; a request for confirmation at the first start after the declaration; or a trust setting applied to the whole project folder.
+**The enabling MUST be given for both events.** Approving only one of them is by far the most frequent way of ending up with a halved archive without noticing.
 
-*Terzo – verifica.* Si svolge un turno qualunque e si controlla che l'archivio contenga entrambe le estremità di quel turno.
-È l'unica prova che conta: la presenza della dichiarazione nel file di configurazione non prova che l'abilitazione sia avvenuta, e i due stati sono indistinguibili dall'esterno.
+*Third – verification.* One carries out an ordinary turn and checks that the archive holds both ends of that turn.
+It is the only proof that counts: the presence of the declaration in the configuration file does not prove that the enabling has taken place, and the two states are indistinguishable from outside.
 
-**Che cosa cambia fra prodotti.** Nome e posizione del file di configurazione; la sua sintassi; i nomi con cui i due eventi sono chiamati; il modo in cui si dà l'abilitazione; la possibilità di configurare il tempo massimo.
-**Che cosa non cambia:** servono due eventi e non uno; il comando eseguito è lo stesso per entrambi; l'abilitazione è un atto umano distinto dalla dichiarazione; la verifica si fa sul campo.
+**What changes between products.** The name and location of the configuration file; its syntax; the names by which the two events are called; the way the enabling is given; whether the maximum time can be configured.
+**What does not change:** two events are needed, not one; the command run is the same for both; the enabling is a human act distinct from the declaration; the verification is done in the field.
 
-**Quando l'aggancio non scatta.** Le cause ricorrenti, dalla più frequente alla meno:
+**When the hook does not fire.** The recurrent causes, from the most frequent to the least:
 
-1. dichiarato ma mai abilitato;
-2. abilitato per un solo evento;
-3. percorso del comando calcolato rispetto a una cartella diversa da quella di progetto: si indichi un percorso relativo alla radice del repository, o assoluto, e lo si verifichi;
-4. script privo del permesso di esecuzione, oppure interprete non trovato: si invochi `python3 <percorso>` invece di affidarsi alla prima riga del file;
-5. tempo massimo troppo breve per i turni con risposte lunghe;
-6. sessione non interattiva, o modalità di esecuzione in cui lo strumento non attiva gli agganci.
+1. declared but never enabled;
+2. enabled for one event only;
+3. the command path computed relative to a folder other than the project one: give a path relative to the root of the repository, or an absolute one, and verify it;
+4. the script lacking execution permission, or the interpreter not found: invoke `python3 <path>` instead of relying on the file's first line;
+5. maximum time too short for turns with long answers;
+6. a non-interactive session, or a mode of execution in which the tool does not activate the hooks.
 
-**Quando l'abilitazione va rifatta.** È riferita alla macchina e all'utente: chi copia il repository su un'altra postazione la ripete.
-Va rifatta anche dopo ogni modifica della dichiarazione, e alcuni strumenti la revocano quando si aggiornano.
-Dopo ogni rinnovo si ripete la verifica del terzo passo.
+**When the enabling has to be redone.** It refers to the machine and the user: whoever copies the repository onto another workstation repeats it.
+It must also be redone after every change to the declaration, and some tools revoke it when they update.
+After every renewal the verification of the third step is repeated.
 
-**Prima di abilitare.** Si legga lo script.
-È codice che verrà eseguito a ogni turno con i permessi dell'utente, e la raccomandazione vale per quello fornito con questo repository come per qualunque altro.
+**Before enabling.** Read the script.
+It is code that will be run at every turn with the user's permissions, and the recommendation holds for the one supplied with this repository as for any other.
 
-*Nessuna via intermedia.* Una configurazione che intercetti uno solo dei due eventi non è ammessa: produrrebbe un archivio contenente metà di ciascun turno senza dichiararlo, che è la condizione peggiore di tutte, perché sembra completo.
-Va completata la configurazione, oppure disattivata in favore della seconda via.
-Le prescrizioni operative dei due casi sono in `registri/INSTRUCTIONS.md`.
+*No middle route.* A configuration that intercepts only one of the two events is not admissible: it would produce an archive holding half of each turn without declaring it, which is the worst condition of all, because it looks complete.
+Either the configuration is completed, or it is switched off in favour of the second route.
+The operational prescriptions for the two cases are in `REGISTERS/INSTRUCTIONS.md`.
 
-*Che cosa succede se non si fa nulla.* `CONVERSATION.md` resta vuoto.
-Il progetto conserva stato, attività e cronologia delle modifiche, e perde la sola cosa che nessuno degli altri registri conserva: che cosa sia stato davvero chiesto al modello e che cosa esso abbia risposto.
-La perdita non si avverte finché si lavora (è questo che la rende insidiosa) e si manifesta nella Fase 5, quando a distanza di mesi occorre stabilire su quali basi una formulazione sia stata adottata, oppure quando l'amministrazione deve documentare come ha usato un sistema di IA.
-A quel punto il dato non è recuperabile: la finestra in cui esisteva si è chiusa a ogni turno.
-Un progetto senza archivio delle interazioni resta utilizzabile, ma non è conforme al metodo, e la difformità DEVE essere dichiarata in `PROJECT.md` invece di restare implicita.
+*What happens if nothing is done.* `CONVERSATION.md` stays empty.
+The project keeps its state, its activities and the history of its changes, and loses the one thing none of the other registers keeps: what was actually asked of the model and what it answered.
+The loss is not felt while the work is going on (which is what makes it insidious) and shows itself in Phase 5, when months later it becomes necessary to establish on what basis a wording was adopted, or when the administration has to document how it used an AI system.
+By then the information cannot be recovered: the window in which it existed closed at every turn.
+A project without an interaction archive remains usable, but it does not conform to the method, and the non-conformity MUST be declared in `PROJECT.md` instead of being left implicit.
 
 ---
 
-## Appendice tecnica 3 – Macchina locale e server condiviso
+## Technical appendix 3 – Local machine and shared server
 
-Il metodo non impone dove collocare l'ambiente di lavoro, ma la scelta incide sulla continuità del lavoro e sulla sua governabilità.
-Le due opzioni sono la postazione personale del redattore e un server condiviso, di solito una macchina virtuale in un centro dati dell'ente o di un fornitore.
+The method does not prescribe where the working environment should sit, but the choice bears on the continuity of the work and on how governable it is.
+The two options are the drafter's personal workstation and a shared server, usually a virtual machine in a data centre of the administration or of a supplier.
 
-**Il server condiviso DOVREBBE essere preferito** quando ricorre anche una sola di queste condizioni: il progetto dura più di poche settimane; vi lavora più di una persona; la documentazione prodotta è destinata all'adozione formale.
-Le ragioni sono le seguenti.
+**The shared server SHOULD be preferred** when even one of these conditions applies: the project lasts more than a few weeks; more than one person works on it; the documentation produced is intended for formal adoption.
+The reasons are as follows.
 
-*Indipendenza dalla postazione.* Il lavoro è raggiungibile da qualunque macchina con una connessione remota.
-La sostituzione, il guasto o l'aggiornamento del computer personale non interrompono la lavorazione, e un collega che subentra non deve ricostruire un ambiente.
+*Independence from the workstation.* The work is reachable from any machine with a remote connection.
+Replacing, repairing or updating the personal computer does not interrupt the work, and a colleague taking over does not have to rebuild an environment.
 
-*Stabilità dell'infrastruttura.* Un centro dati garantisce continuità elettrica, condizionamento, ridondanza di rete e sicurezza fisica dei locali: condizioni che una postazione da ufficio non riproduce.
-Un progetto che dura mesi, su una postazione personale, corre un rischio di interruzione sproporzionato rispetto al valore del lavoro.
+*Stability of the infrastructure.* A data centre guarantees electrical continuity, air conditioning, network redundancy and physical security of the premises: conditions an office workstation does not reproduce.
+A project lasting months, on a personal workstation, runs a risk of interruption out of all proportion to the value of the work.
 
-*Salvaguardia e conservazione.* Le procedure di copia e conservazione dell'ente si applicano da sole.
-La cronologia Git protegge già dalla perdita accidentale di contenuti, ma non dalla perdita del supporto: le due protezioni sono complementari e nessuna sostituisce l'altra.
+*Safeguarding and preservation.* The administration's backup and preservation procedures apply of their own accord.
+The Git history already protects against accidental loss of content, but not against loss of the medium: the two protections are complementary and neither replaces the other.
 
-*Uniformità dell'ambiente.* Versioni degli strumenti, configurazioni e cartella di contesto sono uniche e condivise.
-Si evita così che due postazioni divergano senza che nessuno se ne accorga, cosa che di solito si scopre quando due redattori ottengono risultati diversi dalla stessa richiesta.
+*Uniformity of the environment.* Tool versions, configurations and the context folder are single and shared.
+This avoids two workstations diverging without anyone noticing, something usually discovered when two drafters obtain different results from the same request.
 
-*Governabilità.* Accessi, autorizzazioni e tracce d'uso sono amministrati in un solo punto e verificabili.
-Per un'amministrazione che debba dimostrare come ha usato un sistema di IA, la differenza rispetto a una postazione personale è sostanziale.
+*Governability.* Access, authorisations and usage trails are administered in one place and can be verified.
+For an administration that has to demonstrate how it used an AI system, the difference from a personal workstation is substantial.
 
-*Sostenibilità economica.* Una sola macchina virtuale serve più redattori e più progetti, con un costo di esercizio inferiore alla somma delle postazioni equivalenti.
+*Economic sustainability.* A single virtual machine serves several drafters and several projects, at a running cost lower than the sum of the equivalent workstations.
 
-**Cautele.** Il vantaggio non è incondizionato.
-Un ambiente condiviso e raggiungibile dall'esterno richiede: accesso con credenziali personali e autenticazione robusta, esposizione limitata alla rete strettamente necessaria, separazione fra progetti che trattano dati di natura diversa, indicazione esplicita di chi può leggere la cartella di contesto e l'archivio delle interazioni, e coinvolgimento preventivo del responsabile della protezione dei dati.
-Le credenziali di accesso ai servizi NON DEVONO stare nel repository né in file leggibili dagli altri utenti della macchina.
+**Precautions.** The advantage is not unconditional.
+A shared environment reachable from outside requires: access with personal credentials and robust authentication, exposure limited to the strictly necessary network, separation between projects handling data of different kinds, explicit indication of who may read the context folder and the interaction archive, and prior involvement of the data protection officer.
+Credentials for access to services MUST NOT sit in the repository, nor in files readable by the machine's other users.
 
-Una postazione personale resta adeguata per lavorazioni brevi, individuali e prive di dati personali.
-Fuori da queste condizioni la scelta DOVREBBE essere motivata e annotata nel registro di stato.
+A personal workstation remains adequate for short, individual work with no personal data.
+Outside those conditions the choice SHOULD be reasoned and noted in the state register.
 
 ---
 
-## Appendice tecnica 4 – Collaborazione fra più redattori
+## Technical appendix 4 – Collaboration between several drafters
 
-Quando più persone scrivono lo stesso corpus, il metodo usa le funzioni di ramificazione e integrazione di Git, senza introdurre altri strumenti.
+When several people write the same corpus, the method uses Git's branching and merging functions, without introducing other tools.
 
-**Ramo principale e rami di lavoro.** Il ramo principale contiene lo stato condiviso e stabile del progetto.
-Ogni redattore lavora su un ramo proprio, con un nome che dica di che cosa si tratta (per redattore, per documento o per tema) e vi esegue i propri commit.
-Il ramo principale NON DEVE essere modificato direttamente quando i redattori sono più di uno.
+**Main branch and working branches.** The main branch holds the shared, stable state of the project.
+Each drafter works on a branch of their own, with a name that says what it is about (by drafter, by document or by theme) and makes their commits there.
+The main branch MUST NOT be modified directly when there is more than one drafter.
 
 ```shell
-git switch -c redazione/capo-iii     # ramo di lavoro
-# … ciclo di produzione …
-git switch main && git merge redazione/capo-iii
+git switch -c drafting/chapter-iii     # working branch
+# … production cycle …
+git switch main && git merge drafting/chapter-iii
 ```
 
-**Integrazione.** Un ramo DOVREBBE essere riportato nel ramo principale al termine di un ciclo di produzione completo, non a metà.
-Un ramo integrato a lavorazione incompleta immette nel testo condiviso passaggi non ancora rivisti.
+**Merging.** A branch SHOULD be brought back into the main branch at the end of a complete production cycle, not halfway through.
+A branch merged with the work incomplete puts passages that have not yet been reviewed into the shared text.
 
-**Conflitti sui documenti.** Un conflitto di integrazione su una bozza segnala che due redattori hanno lavorato sullo stesso passaggio.
-La soluzione è una decisione di merito e NON DEVE essere delegata al modello: spetta ai redattori interessati, e l'esito DEVE essere annotato nel worklog.
+**Conflicts on the documents.** A merge conflict on a draft signals that two drafters have worked on the same passage.
+Resolving it is a decision on the merits and MUST NOT be delegated to the model: it falls to the drafters concerned, and the outcome MUST be noted in the worklog.
 
-**Conflitti sui registri.** I registri si comportano in modo diverso fra loro, e la distinzione è pratica.
-Worklog e archivio delle interazioni crescono in fondo: i conflitti sono rari e si risolvono tenendo entrambe le parti in ordine cronologico.
-Istruzioni e stato di progetto si modificano sul posto: un conflitto indica che due redattori hanno aggiornato lo stesso quadro, e va risolto scegliendo, non accostando.
+**Conflicts on the registers.** The registers behave differently from one another, and the distinction is a practical one.
+The worklog and the interaction archive grow at the end: conflicts there are rare and are resolved by keeping both parts in chronological order.
+The instructions and the project state are edited in place: a conflict means that two drafters have updated the same picture, and it must be resolved by choosing, not by juxtaposing.
 
-**Sincronizzazione.** Se esiste un repository remoto, prima di leggere lo stato del progetto DEVE essere eseguita una sincronizzazione, e DEVONO essere accettati soltanto avanzamenti lineari.
-Le divergenze DEVONO essere segnalate e non risolte da sé.
+**Synchronisation.** If a remote repository exists, a synchronisation MUST be performed before the state of the project is read, and only linear advances MUST be accepted.
+Divergences MUST be reported and MUST NOT be resolved unilaterally.
 
+---
+
+## Technical appendix 5 – Languages of the kit
+
+### How the languages are arranged
+
+English sits at the root of the repository. Every other language sits in `lang/<code>/`, where `<code>` is the two-letter code of the language (`it` for Italian), in a folder that mirrors the root **with the same file names**:
+
+```
+README.md                          PROJECT_BRIEF.md
+REGISTERS/INSTRUCTIONS.md          REGISTERS/PROJECT.md …
+images/method-architecture.png
+lang/it/README.md                  lang/it/PROJECT_BRIEF.md
+lang/it/REGISTERS/INSTRUCTIONS.md  lang/it/REGISTERS/PROJECT.md …
+lang/it/images/method-architecture.png
+```
+
+This repository is not a set of documents to be read: it is the working skeleton of a project, and its files have to sit at prescribed paths: `REGISTERS/INSTRUCTIONS.md` is read at every session, the capture script writes to `REGISTERS/CONVERSATION.md`, the tool's start-up file refers on to `PROJECT_BRIEF.md`.
+
+### What a language folder holds, and what it does not
+
+A folder under `lang/` holds only what changes with the language: this
+specification, the project brief, the four registers and, where it is
+translated, the figure. It is not a self-contained copy of the kit.
+
+Everything that does not change with the language lives once, at the root:
+
+| At the root only | Why |
+| :---- | :---- |
+| `TOOLS/record_interaction.py` | It is the only code file of the kit. Two copies would mean a fix applied to one and not to the other, which is the very defect this arrangement exists to avoid. Its docstring and comments are in English in every language of the kit. |
+| `LICENSE`, `LICENSES/`, `REUSE.toml` | One licence, declared once, file by file. Duplicating the declaration would weaken exactly what it is for. |
+| `.gitignore` | Patterns, not prose. |
+| `CONTEXT/`, `RELEASE/` | Working folders, empty by design: the adopting administration fills them. |
+
+The choice of language is therefore an **overlay**, not a move: the documents of
+one language are laid over the root, which is already complete, and the folder of
+languages is removed. What remains is a complete project in one language.
+
+### Starting a project in a given language
+
+The choice is made once, when the repository is initialised ([Initialising the repository](#721-initialising-the-repository)), and consists of promoting one language to the root and removing the rest:
+
+| Language of the work | Command |
+| :---- | :---- |
+| English | `rm -rf lang` |
+| Italian | `cp -r lang/it/. .` then `rm -rf lang` |
+| any other | `cp -r lang/<code>/. .` then `rm -rf lang` |
+
+**It is a single, indivisible act, and that is the point.** An operation to be carried out file by file gets carried out half way: a project ends up with the specification in one language and the operating rules in another, and nobody notices until the rules are the ones that matter. Promoting a whole folder either happens or it does not.
+
+The same reasoning applies to the opposite temptation. Keeping both languages inside the project, meaning to delete one later, produces two binding documents that state the same rules: one gets updated, the other does not, and whoever reads the wrong one works to superseded rules. Anyone who wants a second language for reading keeps it **outside** the project.
+
+Once the choice is made, `lang/` no longer exists in the adopting project. Its continued presence is a defect, and the rule in `REGISTERS/INSTRUCTIONS.md` has the model report it at the opening of every session.
+
+### What stays identical across languages
+
+- **The names of files and folders**, as above. They are the structure, not content.
+- **The numbering of sections and appendices.** Cross-references cite numbers, and the registers of a project cite them too: section 8.4 must be the completeness analysis in every language.
+- **The annotation delimiters** `<<<` and `>>>`, described in [Human review](#83-action-23--human-review): they are recognised by the model, not read by a person.
+- **The markers and labels of the interaction archive** (`<!-- interaction:… -->`, `## Request`, `capture: environment`), which are in English in every language of the kit, because the capture script is one and the same. The text recorded stays verbatim in the language in which it was written.
+- **The SPDX headers** and the machine-readable licensing declaration (`REUSE.toml`).
+- **The types of commit message** (`feat`, `fix`, `docs`, `refactor`, `chore`, `meta`, `checkpoint`) and the convention `type(scope): description`.
+
+Not translated: `LICENSE` and the contents of `LICENSES/`, whose authoritative text is the one published by Creative Commons; and the names by which a tool denotes its own events, which belong to the product.
+
+### Adding a language
+
+1. Copy the root documents into `lang/<code>/`, keeping the structure: `README.md`, `PROJECT_BRIEF.md`, the four files in `REGISTERS/` and, if the figure is translated, `images/method-architecture.png`.
+2. Translate the prose. Keep the names, the numbering and the elements listed above unchanged.
+3. Render the key words of [Key words](#2-key-words) with the established equivalents of the target language. Where a language has no unambiguous rendering of MUST / MUST NOT / SHOULD / MAY, **keep the English key words in capitals** rather than choose an approximation: the whole document rests on their being unambiguous.
+4. Translate the figure, or leave the English one: an untranslated diagram is a limitation, a mistranslated one is a defect.
+5. Do not translate the record markers, the delimiters or the commit types.
+6. Propose the language with a pull request. A translation that stays with its author helps no one.
